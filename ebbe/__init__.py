@@ -2,4 +2,7 @@
 # Ebbe Library Enpoint
 # =============================================================================
 #
-from ebbe.functions import with_prev
+from ebbe.functions import (
+    with_prev,
+    with_next
+)
