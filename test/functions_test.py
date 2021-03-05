@@ -3,7 +3,9 @@
 # =============================================================================
 from ebbe import (
     with_prev,
-    with_next
+    with_next,
+    with_is_first,
+    with_is_last
 )
 
 
@@ -35,5 +37,35 @@ class TestFunctions(object):
         assert result == [(1, None)]
 
         result = list(with_next([]))
+
+        assert result == []
+
+    def test_with_is_first(self):
+        a = [1, 2, 3, 4]
+
+        result = list(with_is_first(a))
+
+        assert result == [(True, 1), (False, 2), (False, 3), (False, 4)]
+
+        result = list(with_is_first([1]))
+
+        assert result == [(True, 1)]
+
+        result = list(with_is_first([]))
+
+        assert result == []
+
+    def test_with_is_last(self):
+        a = [1, 2, 3, 4]
+
+        result = list(with_is_last(a))
+
+        assert result == [(False, 1), (False, 2), (False, 3), (True, 4)]
+
+        result = list(with_is_last([1]))
+
+        assert result == [(True, 1)]
+
+        result = list(with_is_last([]))
 
         assert result == []
