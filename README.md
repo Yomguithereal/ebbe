@@ -20,6 +20,7 @@ pip install ebbe
 * [with_next](#withnext)
 * [with_is_first](#withisfirst)
 * [with_is_last](#withislast)
+* [without_first](#without_first)
 
 ### as_chunks
 
@@ -107,4 +108,18 @@ for is_last, item in ebbe.with_is_last(iterable):
 
 list(ebbe.with_is_last([1, 2, 3]))
 >>> [(False, 1), (False, 2), (True, 3)]
+```
+
+### without_first
+
+Iterate over the given iterator after skipping its first item. Can be useful if you want to skip headers of a CSV file for instance.
+
+```python
+import ebbe
+
+list(ebbe.without_first([1, 2, 3]))
+>>> [2, 3]
+
+for row in ebbe.without_first(csv.reader(f)):
+  print(row)
 ```

@@ -7,7 +7,8 @@ from ebbe import (
     with_prev,
     with_next,
     with_is_first,
-    with_is_last
+    with_is_last,
+    without_first
 )
 
 
@@ -113,3 +114,14 @@ class TestFunctions(object):
         result = list(with_is_last([]))
 
         assert result == []
+
+    def test_without_first(self):
+        a = [1, 2, 3]
+
+        result = list(without_first(a))
+
+        assert result == [2, 3]
+
+        assert list(without_first([1])) == []
+
+        assert list(without_first([])) == []

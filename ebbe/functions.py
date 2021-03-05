@@ -78,3 +78,11 @@ def with_is_last(iterable):
         last = item
 
     yield True, last
+
+
+def without_first(iterable):
+    for is_first, item in with_is_first(iterable):
+        if is_first:
+            continue
+
+        yield item
