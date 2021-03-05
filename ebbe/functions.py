@@ -4,6 +4,35 @@
 #
 
 
+def as_chunks(size, iterable):
+    chunk = []
+
+    for item in iterable:
+        if len(chunk) == size:
+            yield chunk
+            chunk = []
+
+        chunk.append(item)
+
+    if chunk:
+        yield chunk
+
+
+def uniq(iterable):
+    current_item = None
+
+    for is_first, item in with_is_first(iterable):
+        if is_first:
+            yield item
+            current_item = item
+        else:
+            if current_item == item:
+                continue
+
+            current_item = item
+            yield item
+
+
 def with_prev(iterable):
     prev = None
 
@@ -49,17 +78,3 @@ def with_is_last(iterable):
         last = item
 
     yield True, last
-
-
-def as_chunks(size, iterable):
-    chunk = []
-
-    for item in iterable:
-        if len(chunk) == size:
-            yield chunk
-            chunk = []
-
-        chunk.append(item)
-
-    if chunk:
-        yield chunk

@@ -2,15 +2,58 @@
 # Ebbe Functions Unit Tests
 # =============================================================================
 from ebbe import (
+    as_chunks,
+    uniq,
     with_prev,
     with_next,
     with_is_first,
-    with_is_last,
-    as_chunks
+    with_is_last
 )
 
 
 class TestFunctions(object):
+    def test_as_chunks(self):
+        a = [1, 2, 3, 4, 5, 6]
+
+        result = list(as_chunks(2, a))
+
+        assert result == [[1, 2], [3, 4], [5, 6]]
+
+        result = list(as_chunks(3, a))
+
+        assert result == [[1, 2, 3], [4, 5, 6]]
+
+        result = list(as_chunks(4, a))
+
+        assert result == [[1, 2, 3, 4], [5, 6]]
+
+        result = list(as_chunks(6, a))
+
+        assert result == [a]
+
+        result = list(as_chunks(18, a))
+
+        assert result == [a]
+
+        result = list(as_chunks(3, []))
+
+        assert result == []
+
+    def test_uniq(self):
+        a = [1, 1, 2, 2, 2, 2, 3, 4, 4, 5, 2]
+
+        result = list(uniq(a))
+
+        assert result == [1, 2, 3, 4, 5, 2]
+
+        result = list(uniq([1]))
+
+        assert result == [1]
+
+        result = list(uniq([]))
+
+        assert result == []
+
     def test_with_prev(self):
         a = [1, 2, 3, 4]
 
@@ -68,32 +111,5 @@ class TestFunctions(object):
         assert result == [(True, 1)]
 
         result = list(with_is_last([]))
-
-        assert result == []
-
-    def test_as_chunks(self):
-        a = [1, 2, 3, 4, 5, 6]
-
-        result = list(as_chunks(2, a))
-
-        assert result == [[1, 2], [3, 4], [5, 6]]
-
-        result = list(as_chunks(3, a))
-
-        assert result == [[1, 2, 3], [4, 5, 6]]
-
-        result = list(as_chunks(4, a))
-
-        assert result == [[1, 2, 3, 4], [5, 6]]
-
-        result = list(as_chunks(6, a))
-
-        assert result == [a]
-
-        result = list(as_chunks(18, a))
-
-        assert result == [a]
-
-        result = list(as_chunks(3, []))
 
         assert result == []

@@ -15,6 +15,7 @@ pip install ebbe
 ## Usage
 
 * [as_chunks](#aschunks)
+* [uniq](#uniq)
 * [with_prev](#withprev)
 * [with_next](#withnext)
 * [with_is_first](#withisfirst)
@@ -29,6 +30,21 @@ import ebbe
 
 list(ebbe.as_chunks(3, [1, 2, 3, 4, 5]))
 >>> [[1, 2, 3], [4, 5]]
+```
+
+### uniq
+
+Filter repeated items seen next to each other in the given iterator.
+
+```python
+import ebbe
+
+list(ebbe.uniq([1, 1, 1, 2, 3, 4, 4, 5, 5, 6]))
+>>> [1, 2, 3, 4, 5, 6]
+
+# BEWARE: it does not try to remember items (like the `uniq` command)
+list(ebbe.uniq([1, 2, 2, 3, 2]))
+>>> [1, 2, 3, 2]
 ```
 
 ### with_prev
