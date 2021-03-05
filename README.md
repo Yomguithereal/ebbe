@@ -16,18 +16,18 @@ pip install ebbe
 
 *Functions*
 
-* [as_chunks](#aschunks)
-* [fail_fast](#failfast)
+* [as_chunks](#as_chunks)
+* [fail_fast](#fail_fast)
 * [uniq](#uniq)
-* [with_prev](#withprev)
-* [with_next](#withnext)
-* [with_is_first](#withisfirst)
-* [with_is_last](#withislast)
-* [without_first](#withoutfirst)
+* [with_prev](#with_prev)
+* [with_next](#with_next)
+* [with_is_first](#with_is_first)
+* [with_is_last](#with_is_last)
+* [without_first](#without_first)
 
 *Decorators*
 
-* [decorators.fail_fast](#failfastdecorator)
+* [decorators.fail_fast](#decoratorsfail_fast)
 
 ### as_chunks
 
