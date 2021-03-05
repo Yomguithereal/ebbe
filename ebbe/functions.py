@@ -4,6 +4,10 @@
 #
 
 
+def empty_generator():
+    yield from ()
+
+
 def as_chunks(size, iterable):
     chunk = []
 
@@ -16,6 +20,21 @@ def as_chunks(size, iterable):
 
     if chunk:
         yield chunk
+
+
+def fail_fast(iterable):
+    iterator = iter(iterable)
+
+    try:
+        first_item = next(iterator)
+    except StopIteration:
+        return empty_generator()
+
+    def generator():
+        yield first_item
+        yield from iterator
+
+    return generator()
 
 
 def uniq(iterable):

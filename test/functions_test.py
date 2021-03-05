@@ -1,8 +1,10 @@
 # =============================================================================
 # Ebbe Functions Unit Tests
 # =============================================================================
+import pytest
 from ebbe import (
     as_chunks,
+    fail_fast,
     uniq,
     with_prev,
     with_next,
@@ -39,6 +41,20 @@ class TestFunctions(object):
         result = list(as_chunks(3, []))
 
         assert result == []
+
+    def test_fail_fast(self):
+        def hellraiser():
+            raise RuntimeError
+            yield 1
+
+        hellraiser()
+
+        with pytest.raises(RuntimeError):
+            fail_fast(hellraiser())
+
+        assert list(fail_fast([1, 2, 3])) == [1, 2, 3]
+        assert list(fail_fast([1])) == [1]
+        assert list(fail_fast([])) == []
 
     def test_uniq(self):
         a = [1, 1, 2, 2, 2, 2, 3, 4, 4, 5, 2]

@@ -14,13 +14,20 @@ pip install ebbe
 
 ## Usage
 
+*Functions*
+
 * [as_chunks](#aschunks)
+* [fail_fast](#failfast)
 * [uniq](#uniq)
 * [with_prev](#withprev)
 * [with_next](#withnext)
 * [with_is_first](#withisfirst)
 * [with_is_last](#withislast)
-* [without_first](#without_first)
+* [without_first](#withoutfirst)
+
+*Decorators*
+
+* [decorators.fail_fast](#failfastdecorator)
 
 ### as_chunks
 
@@ -31,6 +38,42 @@ import ebbe
 
 list(ebbe.as_chunks(3, [1, 2, 3, 4, 5]))
 >>> [[1, 2, 3], [4, 5]]
+```
+
+### fail_fast
+
+Take an iterable (but this has been geared towards generators, mostly), and tries to access the first value to see if an Exception will be raised before returning an equivalent iterator.
+
+This is useful with some badly-conceived generators that checks arguments and raise if they are not valid, for instance, and if you don't want to wrap the whole iteration block within a try/except.
+
+This logic is also available as a [decorator](#failfastdecorator).
+
+```python
+import ebbe
+
+def hellraiser(n):
+  if n > 10:
+    raise TypeError
+
+  yield from range(n)
+
+# You will need to do this to catch the error:
+gen = hellraiser(15)
+
+try:
+  for i in gen:
+    print(i)
+except TypeError:
+  print('Something went wrong when creating the generator')
+
+# With fail_fast
+try:
+  gen = fail_fast(hellraiser(15))
+except TypeError:
+  print('Something went wrong when creating the generator')
+
+for i in gen:
+  print(i)
 ```
 
 ### uniq
@@ -122,4 +165,33 @@ list(ebbe.without_first([1, 2, 3]))
 
 for row in ebbe.without_first(csv.reader(f)):
   print(row)
+```
+
+### decorators.fail_fast
+
+Decorate a generator function by wrapping it into another generator function that will fail fast if some validation is run before executing the iteration logic so that exceptions can be caught early.
+
+This logic is also available as a [function](#failfast).
+
+```python
+from ebbe.decorators import fail_fast
+
+def hellraiser(n):
+  if n > 10:
+    raise TypeError
+
+  yield from range(n)
+
+# This will not raise until you consume `gen`
+gen = hellraiser(15)
+
+@fail_fast
+def hellraiser(n):
+  if n > 10:
+    raise TypeError
+
+  yield from range(n)
+
+# This will raise immediately
+gen = hellraiser(15)
 ```
