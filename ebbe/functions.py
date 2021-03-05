@@ -51,4 +51,15 @@ def with_is_last(iterable):
     yield True, last
 
 
-# TODO: as_chunks
+def as_chunks(size, iterable):
+    chunk = []
+
+    for item in iterable:
+        if len(chunk) == size:
+            yield chunk
+            chunk = []
+
+        chunk.append(item)
+
+    if chunk:
+        yield chunk

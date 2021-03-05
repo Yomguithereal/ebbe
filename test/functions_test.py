@@ -5,7 +5,8 @@ from ebbe import (
     with_prev,
     with_next,
     with_is_first,
-    with_is_last
+    with_is_last,
+    as_chunks
 )
 
 
@@ -67,5 +68,32 @@ class TestFunctions(object):
         assert result == [(True, 1)]
 
         result = list(with_is_last([]))
+
+        assert result == []
+
+    def test_as_chunks(self):
+        a = [1, 2, 3, 4, 5, 6]
+
+        result = list(as_chunks(2, a))
+
+        assert result == [[1, 2], [3, 4], [5, 6]]
+
+        result = list(as_chunks(3, a))
+
+        assert result == [[1, 2, 3], [4, 5, 6]]
+
+        result = list(as_chunks(4, a))
+
+        assert result == [[1, 2, 3, 4], [5, 6]]
+
+        result = list(as_chunks(6, a))
+
+        assert result == [a]
+
+        result = list(as_chunks(18, a))
+
+        assert result == [a]
+
+        result = list(as_chunks(3, []))
 
         assert result == []
