@@ -76,6 +76,23 @@ def with_next(iterable):
     yield last, None
 
 
+def with_prev_and_next(iterable):
+    prev = None
+    iterator = iter(iterable)
+
+    try:
+        last = next(iterator)
+    except StopIteration:
+        return
+
+    for item in iterator:
+        yield prev, last, item
+        prev = last
+        last = item
+
+    yield prev, last, None
+
+
 def with_is_first(iterable):
     is_first = True
 

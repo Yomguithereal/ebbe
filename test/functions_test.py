@@ -7,6 +7,7 @@ from ebbe import (
     fail_fast,
     uniq,
     with_prev,
+    with_prev_and_next,
     with_next,
     with_is_first,
     with_is_last,
@@ -98,6 +99,21 @@ class TestFunctions(object):
         assert result == [(1, None)]
 
         result = list(with_next([]))
+
+        assert result == []
+
+    def test_with_prev_and_next(self):
+        a = [1, 2, 3, 4]
+
+        result = list(with_prev_and_next(a))
+
+        assert result == [(None, 1, 2), (1, 2, 3), (2, 3, 4), (3, 4, None)]
+
+        result = list(with_prev_and_next([1]))
+
+        assert result == [(None, 1, None)]
+
+        result = list(with_prev_and_next([]))
 
         assert result == []
 

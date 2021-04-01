@@ -20,6 +20,7 @@ pip install ebbe
 * [fail_fast](#fail_fast)
 * [uniq](#uniq)
 * [with_prev](#with_prev)
+* [with_prev_and_next](#with_prev_and_next)
 * [with_next](#with_next)
 * [with_is_first](#with_is_first)
 * [with_is_last](#with_is_last)
@@ -103,6 +104,21 @@ for previous_item, item in ebbe.with_prev(iterable):
 
 list(ebbe.with_prev([1, 2, 3]))
 >>> [(None, 1), (1, 2), (2, 3)]
+```
+
+### with_prev_and_next
+
+Iterate over items along with the previous and the next one.
+
+```python
+import ebbe
+
+for previous_item, item, next_item in ebbe.with_prev_and_next(iterable):
+  print(previous_item, 'came before', item)
+  print(next_item, 'will come after', item)
+
+list(ebbe.with_prev_and_next([1, 2, 3]))
+>>> [(None, 1, 2), (1, 2, 3), (2, 3, None)]
 ```
 
 ### with_next
