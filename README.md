@@ -2,7 +2,7 @@
 
 # Ebbe
 
-A collection of iterator-related functions for python that cannot be found in the however great `itertools` package.
+A collection of typical helper functions for python that cannot be found in the however great standard library.
 
 ## Installation
 
@@ -14,7 +14,7 @@ pip install ebbe
 
 ## Usage
 
-*Functions*
+*Iterator functions*
 
 * [as_chunks](#as_chunks)
 * [fail_fast](#fail_fast)
@@ -29,6 +29,7 @@ pip install ebbe
 *Decorators*
 
 * [decorators.fail_fast](#decoratorsfail_fast)
+* [decorators.with_defer](#with_defer)
 
 ### as_chunks
 
@@ -201,7 +202,7 @@ def hellraiser(n):
 # This will not raise until you consume `gen`
 gen = hellraiser(15)
 
-@fail_fast
+@fail_fast()
 def hellraiser(n):
   if n > 10:
     raise TypeError
@@ -210,4 +211,21 @@ def hellraiser(n):
 
 # This will raise immediately
 gen = hellraiser(15)
+```
+
+### decorators.with_defer
+
+Decorates a function calling it with a `defer` kwarg working a bit like Go's [defer statement](https://gobyexample.com/defer) so that you can "defer" actions to be done by the end of the function or when an exception is raised to cleanup or tear down things.
+
+This relies on an [ExitStack](https://docs.python.org/3/library/contextlib.html#contextlib.ExitStack) and can of course be also accomplished by context managers but this way of declaring things to defer can be useful sometimes to avoid nesting in complex functions.
+
+```python
+from ebbe.decorators import with_defer
+
+@with_defer()
+def main(content, *, defer):
+  f = open('./output.txt', 'w')
+  defer(f.close)
+
+  f.write(content)
 ```
