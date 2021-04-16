@@ -3,7 +3,8 @@
 # =============================================================================
 #
 from collections.abc import Iterable
-from functools import partial
+
+from ebbe.iter import uniq
 
 
 def noop(*args, **kwargs):
@@ -89,3 +90,7 @@ def pathgetter(*paths, items=True, attributes=False, split_char=None,
             )
 
     return operation
+
+
+def sorted_uniq(seq, **kwargs):
+    return list(uniq(sorted(seq, **kwargs)))

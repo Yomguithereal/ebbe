@@ -5,7 +5,8 @@ import pytest
 
 from ebbe import (
     getpath,
-    pathgetter
+    pathgetter,
+    sorted_uniq
 )
 
 
@@ -77,3 +78,9 @@ class TestUtils(object):
         )
 
         assert tuple_getter(NESTED_OBJECT) == (5, None, 45)
+
+    def test_sorted_uniq(self):
+        numbers = [3, 17, 3, 4, 1, 4, 5, 5, 1, -1, 5]
+
+        assert sorted_uniq(numbers) == [-1, 1, 3, 4, 5, 17]
+        assert sorted_uniq(numbers, reverse=True) == [17, 5, 4, 3, 1, -1]

@@ -31,6 +31,7 @@ pip install ebbe
 * [getpath](#getpath)
 * [pathgetter](#pathgetter)
 * [noop](#noop)
+* [sorted_uniq](#sorted_uniq)
 
 *Decorators*
 
@@ -284,6 +285,22 @@ from ebbe import noop
 noop() # Does nothing...
 noop(4, 5) # Still does nothing...
 noop(4, index=65) # Nothing yet again...
+```
+
+### sorted_uniq
+
+Function sorting the given iterable then dropping its duplicate through a single linear pass over the data.
+
+```python
+from ebbe import sorted_uniq
+
+numbers = [3, 17, 3, 4, 1, 4, 5, 5, 1, -1, 5]
+sorted_uniq(numbers)
+>>> [-1, 1, 3, 4, 5, 17]
+
+# It accepts all of `sorted` kwargs:
+sorted_uniq(numbers, reverse=True)
+>>> [17, 5, 4, 3, 1, -1]
 ```
 
 ### decorators.fail_fast

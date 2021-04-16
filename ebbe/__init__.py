@@ -16,5 +16,6 @@ from ebbe.iter import (
 from ebbe.utils import (
     noop,
     getpath,
-    pathgetter
+    pathgetter,
+    sorted_uniq
 )
