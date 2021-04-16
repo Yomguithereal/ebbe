@@ -13,3 +13,6 @@ from ebbe.iter import (
     with_is_last,
     without_first
 )
+from ebbe.utils import (
+    noop
+)

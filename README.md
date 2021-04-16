@@ -26,6 +26,10 @@ pip install ebbe
 * [with_is_last](#with_is_last)
 * [without_first](#without_first)
 
+*Utilities*
+
+* [noop](#noop)
+
 *Decorators*
 
 * [decorators.fail_fast](#decoratorsfail_fast)
@@ -182,6 +186,18 @@ list(ebbe.without_first([1, 2, 3]))
 
 for row in ebbe.without_first(csv.reader(f)):
   print(row)
+```
+
+### noop
+
+Noop function (a function that can be called with any arguments and does nothing). Useful as a default to avoid complicating code sometimes.
+
+```python
+from ebbe import noop
+
+noop() # Does nothing...
+noop(4, 5) # Still does nothing...
+noop(4, index=65) # Nothing yet again...
 ```
 
 ### decorators.fail_fast
