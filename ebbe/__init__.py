@@ -2,7 +2,7 @@
 # Ebbe Library Enpoint
 # =============================================================================
 #
-from ebbe.functions import (
+from ebbe.iter import (
     as_chunks,
     fail_fast,
     uniq,

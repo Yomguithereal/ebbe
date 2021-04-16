@@ -3,7 +3,7 @@
 # =============================================================================
 #
 from functools import wraps
-from ebbe.functions import fail_fast as fail
+from ebbe.iter import fail_fast as fail
 
 
 def fail_fast(fn):
