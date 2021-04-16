@@ -14,5 +14,7 @@ from ebbe.iter import (
     without_first
 )
 from ebbe.utils import (
-    noop
+    noop,
+    getpath,
+    pathgetter
 )

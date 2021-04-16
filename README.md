@@ -28,6 +28,8 @@ pip install ebbe
 
 *Utilities*
 
+* [getpath](#getpath)
+* [pathgetter](#pathgetter)
 * [noop](#noop)
 
 *Decorators*
@@ -187,6 +189,90 @@ list(ebbe.without_first([1, 2, 3]))
 for row in ebbe.without_first(csv.reader(f)):
   print(row)
 ```
+
+### getpath
+
+Operator function used to retrieve a value at given path in a nested structure or a default value if this value cannot be found.
+
+```python
+from ebbe import getpath
+
+data = {'a': {'b': [{'c': 34}, 'test'], 'd': 'hello'}}
+
+getpath(data, ['a', 'b', 0, 'c'])
+>>> 34
+
+getpath(data, ['t', 'e', 's', 't'])
+>>> None
+
+# Using a default return value
+getpath(data, ['t', 'e', 's', 't'], 45)
+>>> 45
+
+# Using a string path
+getpath(data, 'a.b.d', split_char='.')
+>>> 'hello'
+```
+
+*Arguments*
+
+* **target** *any*: target object.
+* **path** *iterable*: path to get.
+* **default** *?any* [`None`]: default value to return.
+* **items** *?bool* [`True`]: whether to attempt to traverse keys and indices.
+* **attributes** *?bool* [`False`]: whether to attempt to traverse attributes.
+* **split_char** *?str*: if given, will split strings passed as path instead of raising `TypeError`.
+* **parse_indices** *?bool* [`False`]: whether to parse integer indices when splitting string paths.
+
+### pathgetter
+
+Function returning a getter function working as [getpath](#getpath) and partially applied to use the provided path or paths.
+
+```python
+from ebbe import pathgetter
+
+data = {'a': {'b': [{'c': 34}, 'test'], 'd': 'hello'}}
+
+getter = pathgetter(['a', 'b', 0, 'c'])
+getter(data)
+>>> 34
+
+getter = pathgetter(['t', 'e', 's', 't'])
+getter(data)
+>>> None
+
+# Using a default return value
+getter = pathgetter(['t', 'e', 's', 't'])
+getter(data, 45)
+>>> 45
+
+# Using a string path
+getter = pathgetter('a.b.d', split_char='.')
+getter(data)
+>>> 'hello'
+
+# Using multiple paths
+getter = pathgetter(
+  ['a', 'b', 0, 'c'],
+  ['t', 'e', 's', 't'],
+  ['a', 'b', 'd']
+)
+getter(data)
+>>> (34, None, 'hello')
+```
+
+*Arguments*
+
+* **paths** *list*: paths to get.
+* **items** *?bool* [`True`]: whether to attempt to traverse keys and indices.
+* **attributes** *?bool* [`False`]: whether to attempt to traverse attributes.
+* **split_char** *?str*: if given, will split strings passed as path instead of raising `TypeError`.
+* **parse_indices** *?bool* [`False`]: whether to parse integer indices when splitting string paths.
+
+*Getter arguments*
+
+* **target** *any*: target object.
+* **default** *?any* [`None`]: default value to return.
 
 ### noop
 

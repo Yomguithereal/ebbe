@@ -1,5 +1,5 @@
 # =============================================================================
-# Ebbe Functions Unit Tests
+# Ebbe Iterating Functions Unit Tests
 # =============================================================================
 import pytest
 from ebbe import (
@@ -15,7 +15,7 @@ from ebbe import (
 )
 
 
-class TestFunctions(object):
+class TestIter(object):
     def test_as_chunks(self):
         a = [1, 2, 3, 4, 5, 6]
 
