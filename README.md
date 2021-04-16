@@ -36,7 +36,7 @@ pip install ebbe
 *Decorators*
 
 * [decorators.fail_fast](#decoratorsfail_fast)
-* [decorators.with_defer](#with_defer)
+* [decorators.with_defer](#decoratorswith_defer)
 
 ### as_chunks
 
