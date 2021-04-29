@@ -4,7 +4,7 @@ with open('./README.md', 'r') as f:
     long_description = f.read()
 
 setup(name='ebbe',
-      version='1.3.0',
+      version='1.3.1',
       description='A collection of iterator-related functions for python.',
       long_description=long_description,
       long_description_content_type='text/markdown',
