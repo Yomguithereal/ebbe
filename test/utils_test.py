@@ -51,6 +51,8 @@ class TestUtils(object):
         assert getpath(NESTED_OBJECT, 'a.b.1', split_char='.', parse_indices=True) == 45
         assert getpath(NESTED_OBJECT, 'a.b.-1.f.-1', split_char='.', parse_indices=True) == 3
 
+        assert getpath([[1, 2]], [3, 4, 17]) is None
+
     def test_pathgetter(self):
         with pytest.raises(TypeError):
             pathgetter()

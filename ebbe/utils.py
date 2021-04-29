@@ -41,7 +41,7 @@ def getpath(target, path, default=None, *, items=True, attributes=False,
         if items and callable(getattr(target, '__getitem__', None)):
             try:
                 target = target[step]
-            except (IndentationError, KeyError):
+            except (IndexError, KeyError):
                 return default
         elif attributes:
             try:
