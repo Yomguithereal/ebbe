@@ -7,8 +7,6 @@ from collections import OrderedDict
 from collections.abc import Iterable
 from typing import Iterable, Hashable
 
-from ebbe.iter import uniq
-
 AT_LEAST_PY37 = version_info >= (3, 7)
 DEFAULT_ORDERED_DICT = dict if AT_LEAST_PY37 else OrderedDict
 
@@ -115,8 +113,29 @@ def pathgetter(*paths, items=True, attributes=False, split_char=None,
     return operation
 
 
-def sorted_uniq(seq, **kwargs):
-    return list(uniq(sorted(seq, **kwargs)))
+def sorted_uniq(iterable, key=None, **kwargs):
+    started = False
+    last_k = None
+
+    output = []
+
+    for item in sorted(iterable, key=key, **kwargs):
+        k = item
+
+        if key is not None:
+            k = key(item)
+
+        if not started:
+            started = True
+            output.append(item)
+        else:
+            if k == last_k:
+                continue
+            output.append(item)
+
+        last_k = k
+
+    return output
 
 
 def indexed(iterable, factory=dict, *, key=None):

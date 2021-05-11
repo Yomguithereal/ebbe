@@ -115,6 +115,10 @@ class TestUtils(object):
         assert sorted_uniq(numbers) == [-1, 1, 3, 4, 5, 17]
         assert sorted_uniq(numbers, reverse=True) == [17, 5, 4, 3, 1, -1]
 
+        tuples = [(11, 23), (1, 2), (2, 2), (3, 2), (1, 5), (1, 6)]
+
+        assert sorted_uniq(tuples, key=getter(1)) == [(1, 2), (1, 5), (1, 6), (11, 23)]
+
     def test_indexed(self):
         with pytest.raises(TypeError):
             indexed(None)
