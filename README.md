@@ -34,6 +34,9 @@ pip install ebbe
 * [getpath](#getpath)
 * [pathgetter](#pathgetter)
 * [noop](#noop)
+* [indexed](#indexed)
+* [grouped](#grouped)
+* [partitioned](#partitioned)
 * [sorted_uniq](#sorted_uniq)
 
 *Decorators*
@@ -340,6 +343,49 @@ from ebbe import noop
 noop() # Does nothing...
 noop(4, 5) # Still does nothing...
 noop(4, index=65) # Nothing yet again...
+```
+
+### indexed
+
+Function indexing the given iterable in a dict-like structure. This is basically just some functional sugar over a `dict` constructor.
+
+```python
+from ebbe import indexed
+
+indexed(range(3), key=lambda x: x * 10)
+>>> {
+  0: 0,
+  10: 1,
+  20: 2
+}
+```
+
+### grouped
+
+Function grouping the given iterable by a key.
+
+```python
+from ebbe import grouped
+
+grouped(range(4), key=lambda x: x % 2)
+>>> {
+  0: [0, 2],
+  1: [1, 3]
+}
+```
+
+### partitioned
+
+Function partitioning the given iterable by key.
+
+```python
+from ebbe import partitioned
+
+partitioned(range(4), key=lambda x: x % 2)
+>>> [
+  [0, 2],
+  [1, 3]
+]
 ```
 
 ### sorted_uniq
