@@ -81,7 +81,11 @@ class TestIter(object):
         result = list(distinct(a))
         assert result == [(1, 4), (1, 5), (2, 3), (4, 5), (2, 7), (6, 8)]
 
-        result = list(distinct(a, key=itemgetter(0))) == [(1, 4), (2, 3), (4, 5), (6, 8)]
+        result = list(distinct(a, key=itemgetter(0)))
+        assert result == [(1, 4), (2, 3), (4, 5), (6, 8)]
+
+        result = list(distinct(range(4), key=lambda x: x % 2))
+        assert result == [0, 1]
 
     def test_with_prev(self):
         a = [1, 2, 3, 4]

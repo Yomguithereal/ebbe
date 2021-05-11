@@ -19,6 +19,7 @@ pip install ebbe
 * [as_chunks](#as_chunks)
 * [fail_fast](#fail_fast)
 * [uniq](#uniq)
+* [distinct](#distinct)
 * [with_prev](#with_prev)
 * [with_prev_and_next](#with_prev_and_next)
 * [with_next](#with_next)
@@ -100,6 +101,20 @@ list(ebbe.uniq([1, 1, 1, 2, 3, 4, 4, 5, 5, 6]))
 # BEWARE: it does not try to remember items (like the `uniq` command)
 list(ebbe.uniq([1, 2, 2, 3, 2]))
 >>> [1, 2, 3, 2]
+```
+
+### distinct
+
+Filter repeated items, optionally by key, in the given iterator.
+
+```python
+import ebbe
+
+list(ebbe.distinct([0, 3, 4, 4, 1, 0, 3]))
+>>> [0, 3, 4, 1]
+
+list(ebbe.distinct(range(6), key=lambda x: x % 2))
+>>> [0, 1]
 ```
 
 ### with_prev
