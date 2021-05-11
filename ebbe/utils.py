@@ -55,7 +55,7 @@ def getpath(target, path, default=None, *, items=True, attributes=False,
 
 
 def pathgetter(*paths, items=True, attributes=False, split_char=None,
-               parse_indices=False):
+               parse_indices=False, default=None):
 
     if not paths:
         raise TypeError
@@ -68,7 +68,7 @@ def pathgetter(*paths, items=True, attributes=False, split_char=None,
         ]
 
     if len(paths) == 1:
-        def operation(target, default=None):
+        def operation(target, default=default):
             return getpath(
                 target,
                 paths[0],
@@ -77,7 +77,7 @@ def pathgetter(*paths, items=True, attributes=False, split_char=None,
                 attributes=attributes
             )
     else:
-        def operation(target, default=None):
+        def operation(target, default=default):
             return tuple(
                 getpath(
                     target,

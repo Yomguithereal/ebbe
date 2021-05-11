@@ -81,6 +81,11 @@ class TestUtils(object):
 
         assert tuple_getter(NESTED_OBJECT) == (5, None, 45)
 
+        default_getter = pathgetter(['a', 'd', 'e'], default=1337)
+
+        assert default_getter(NESTED_OBJECT) == 5
+        assert default_getter({}) == 1337
+
     def test_sorted_uniq(self):
         numbers = [3, 17, 3, 4, 1, 4, 5, 5, 1, -1, 5]
 
