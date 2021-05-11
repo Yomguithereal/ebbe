@@ -11,6 +11,20 @@ def noop(*args, **kwargs):
     pass
 
 
+def get(target, key, default=None):
+    try:
+        return target[key]
+    except (KeyError, IndexError):
+        return default
+
+
+def getter(key, default=None):
+    def operation(target, default=default):
+        return get(target, key, default=default)
+
+    return operation
+
+
 def parse_index(value):
     try:
         return int(value)

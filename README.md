@@ -28,6 +28,8 @@ pip install ebbe
 
 *Utilities*
 
+* [get](#get)
+* [getter](#getter)
 * [getpath](#getpath)
 * [pathgetter](#pathgetter)
 * [noop](#noop)
@@ -189,6 +191,44 @@ list(ebbe.without_first([1, 2, 3]))
 
 for row in ebbe.without_first(csv.reader(f)):
   print(row)
+```
+
+### get
+
+Operator function similar to `operator.getitem` but able to take a default value.
+
+```python
+from ebbe import get
+
+get([1, 2, 3], 1)
+>>> 2
+
+get([1, 2, 3], 4)
+>>> None
+
+# With default value
+get([1, 2, 3], 4, 35)
+>>> 35
+```
+
+### getter
+
+Operator factory similar to `operator.itemgetter` but able to take a default value.
+
+```python
+from ebbe import getter
+
+get_second_or_thirty = getter(1, 30)
+
+get_second_or_thirty([1, 2, 3])
+>>> 2
+
+get_second_or_thirty([1])
+>>> 30
+
+# Overriding default on the spot
+get_second_or_thirty([1], 76)
+>>> 76
 ```
 
 ### getpath

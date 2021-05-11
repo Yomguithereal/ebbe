@@ -4,6 +4,8 @@
 import pytest
 
 from ebbe import (
+    get,
+    getter,
     getpath,
     pathgetter,
     sorted_uniq
@@ -26,11 +28,27 @@ NESTED_OBJECT = {
             'e': 5,
             'g': Container(45)
         }
-    }
+    },
+    't': 32
 }
 
 
 class TestUtils(object):
+    def test_get(self):
+        assert get(NESTED_OBJECT, 't') == 32
+        assert get(NESTED_OBJECT, 'l') is None
+        assert get(NESTED_OBJECT, 'l', 27) == 27
+
+        assert get([0, 2, 4], 1) == 2
+        assert get([0, 2, 4], 7) is None
+
+    def test_getter(self):
+        assert getter('t')(NESTED_OBJECT) == 32
+        assert getter('l')(NESTED_OBJECT) is None
+        assert getter('l', 27)(NESTED_OBJECT) == 27
+        assert getter('l')(NESTED_OBJECT, 28) == 28
+        assert getter('l', 27)(NESTED_OBJECT, 28) == 28
+
     def test_getpath(self):
         with pytest.raises(TypeError):
             getpath(NESTED_OBJECT, 'test')
