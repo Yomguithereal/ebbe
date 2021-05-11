@@ -20,7 +20,10 @@ def get(target, key, default=None):
 
 def getter(key, default=None):
     def operation(target, default=default):
-        return get(target, key, default=default)
+        try:
+            return target[key]
+        except (KeyError, IndexError):
+            return default
 
     return operation
 
