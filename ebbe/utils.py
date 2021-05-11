@@ -121,14 +121,18 @@ def indexed(iterable, factory=dict, *, key=None):
     if not callable(factory):
         raise TypeError('factory is not callable')
 
-    if not callable(key):
+    if key is not None and not callable(key):
         raise TypeError('key is not callable')
 
     index = factory()
 
-    for item in iterable:
-        k = key(item)
-        index[k] = item
+    if key is not None:
+        for item in iterable:
+            k = key(item)
+            index[k] = item
+    else:
+        for item in iterable:
+            index[item] = item
 
     return index
 
@@ -140,7 +144,7 @@ def grouped(iterable, factory=list, *, key=None):
     if not callable(factory):
         raise TypeError('factory is not callable')
 
-    if not callable(key):
+    if key is not None and not callable(key):
         raise TypeError('key is not callable')
 
     groups = defaultdict(factory)
@@ -152,8 +156,16 @@ def grouped(iterable, factory=list, *, key=None):
     else:
         raise TypeError('unknown container')
 
-    for item in iterable:
-        k = key(item)
-        adder(groups[k], item)
+    if key is not None:
+        for item in iterable:
+            k = key(item)
+            adder(groups[k], item)
+    else:
+        for item in iterable:
+            adder(groups[item], item)
 
     return groups
+
+
+def partitioned(iterable, factory=list, *, key=None):
+    pass

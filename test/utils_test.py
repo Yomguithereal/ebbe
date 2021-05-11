@@ -122,10 +122,9 @@ class TestUtils(object):
             indexed([], None)
 
         with pytest.raises(TypeError):
-            indexed([])
-
-        with pytest.raises(TypeError):
             indexed([], key='test')
+
+        assert indexed(range(3)) == {0: 0, 1: 1, 2: 2}
 
         assert indexed(range(3), key=lambda x: x * 10) == {0: 0, 10: 1, 20: 2}
         ordered = indexed(range(3), OrderedDict, key=lambda x: x * 10)
@@ -143,10 +142,14 @@ class TestUtils(object):
             grouped([], None)
 
         with pytest.raises(TypeError):
-            grouped([])
-
-        with pytest.raises(TypeError):
             grouped([], key='test')
+
+        assert grouped(chain(range(2), range(3), range(4))) == {
+            0: [0, 0, 0],
+            1: [1, 1, 1],
+            2: [2, 2],
+            3: [3]
+        }
 
         assert grouped(range(5), key=lambda x: 'ok' if x in [2, 3] else 'not-ok') == {
             'ok': [2, 3],
