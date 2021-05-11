@@ -2,10 +2,13 @@
 # Ebbe Iterating Functions Unit Tests
 # =============================================================================
 import pytest
+from operator import itemgetter
+
 from ebbe import (
     as_chunks,
     fail_fast,
     uniq,
+    distinct,
     with_prev,
     with_prev_and_next,
     with_next,
@@ -71,6 +74,14 @@ class TestIter(object):
         result = list(uniq([]))
 
         assert result == []
+
+    def test_distinct(self):
+        a = [(1, 4), (1, 5), (2, 3), (4, 5), (2, 7), (6, 8), (2, 3)]
+
+        result = list(distinct(a))
+        assert result == [(1, 4), (1, 5), (2, 3), (4, 5), (2, 7), (6, 8)]
+
+        result = list(distinct(a, key=itemgetter(0))) == [(1, 4), (2, 3), (4, 5), (6, 8)]
 
     def test_with_prev(self):
         a = [1, 2, 3, 4]

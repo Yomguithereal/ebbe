@@ -52,6 +52,28 @@ def uniq(iterable):
             yield item
 
 
+def distinct(iterable, *, key=None):
+    if key is not None and not callable(key):
+        raise TypeError('key is not callable')
+
+    def generator():
+        already_seen = set()
+
+        for item in iterable:
+            k = item
+
+            if key is not None:
+                k = key(item)
+
+            if k in already_seen:
+                continue
+
+            already_seen.add(k)
+            yield item
+
+    return generator()
+
+
 def with_prev(iterable):
     prev = None
 

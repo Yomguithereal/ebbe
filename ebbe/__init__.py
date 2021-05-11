@@ -6,6 +6,7 @@ from ebbe.iter import (
     as_chunks,
     fail_fast,
     uniq,
+    distinct,
     with_prev,
     with_prev_and_next,
     with_next,
