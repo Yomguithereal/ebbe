@@ -49,9 +49,9 @@ pip install ebbe
 Iterate over chunks of the desired size by grouping items as we iterate over them.
 
 ```python
-import ebbe
+from ebbe import as_chunks
 
-list(ebbe.as_chunks(3, [1, 2, 3, 4, 5]))
+list(as_chunks(3, [1, 2, 3, 4, 5]))
 >>> [[1, 2, 3], [4, 5]]
 ```
 
@@ -64,7 +64,7 @@ This is useful with some badly-conceived generators that checks arguments and ra
 This logic is also available as a [decorator](#failfastdecorator).
 
 ```python
-import ebbe
+from ebbe import fail_fast
 
 def hellraiser(n):
   if n > 10:
@@ -96,17 +96,17 @@ for i in gen:
 Filter repeated items, optionally by key, seen next to each other in the given iterator.
 
 ```python
-import ebbe
+from ebbe import uniq
 
-list(ebbe.uniq([1, 1, 1, 2, 3, 4, 4, 5, 5, 6]))
+list(uniq([1, 1, 1, 2, 3, 4, 4, 5, 5, 6]))
 >>> [1, 2, 3, 4, 5, 6]
 
 # BEWARE: it does not try to remember items (like the `uniq` command)
-list(ebbe.uniq([1, 2, 2, 3, 2]))
+list(uniq([1, 2, 2, 3, 2]))
 >>> [1, 2, 3, 2]
 
 # Using a key
-list(ebbe.uniq([(1, 2), (1, 3), (2, 4)], key=lambda x: x[0]))
+list(uniq([(1, 2), (1, 3), (2, 4)], key=lambda x: x[0]))
 >>> [(1, 2), (2, 4)]
 ```
 
@@ -115,12 +115,12 @@ list(ebbe.uniq([(1, 2), (1, 3), (2, 4)], key=lambda x: x[0]))
 Filter repeated items, optionally by key, in the given iterator.
 
 ```python
-import ebbe
+from ebbe import distinct
 
-list(ebbe.distinct([0, 3, 4, 4, 1, 0, 3]))
+list(distinct([0, 3, 4, 4, 1, 0, 3]))
 >>> [0, 3, 4, 1]
 
-list(ebbe.distinct(range(6), key=lambda x: x % 2))
+list(distinct(range(6), key=lambda x: x % 2))
 >>> [0, 1]
 ```
 
@@ -129,12 +129,12 @@ list(ebbe.distinct(range(6), key=lambda x: x % 2))
 Iterate over items along with the previous one.
 
 ```python
-import ebbe
+from ebbe import with_prev
 
-for previous_item, item in ebbe.with_prev(iterable):
+for previous_item, item in with_prev(iterable):
   print(previous_item, 'came before', item)
 
-list(ebbe.with_prev([1, 2, 3]))
+list(with_prev([1, 2, 3]))
 >>> [(None, 1), (1, 2), (2, 3)]
 ```
 
@@ -143,13 +143,13 @@ list(ebbe.with_prev([1, 2, 3]))
 Iterate over items along with the previous and the next one.
 
 ```python
-import ebbe
+from ebbe import with_prev_and_next
 
-for previous_item, item, next_item in ebbe.with_prev_and_next(iterable):
+for previous_item, item, next_item in with_prev_and_next(iterable):
   print(previous_item, 'came before', item)
   print(next_item, 'will come after', item)
 
-list(ebbe.with_prev_and_next([1, 2, 3]))
+list(with_prev_and_next([1, 2, 3]))
 >>> [(None, 1, 2), (1, 2, 3), (2, 3, None)]
 ```
 
@@ -158,12 +158,12 @@ list(ebbe.with_prev_and_next([1, 2, 3]))
 Iterate over items along with the next one.
 
 ```python
-import ebbe
+from ebbe import with_next
 
-for item, next_item in ebbe.with_next(iterable):
+for item, next_item in with_next(iterable):
   print(next_item, 'will come after', item)
 
-list(ebbe.with_next([1, 2, 3]))
+list(with_next([1, 2, 3]))
 >>> [(1, 2), (2, 3), (3, None)]
 ```
 
@@ -172,15 +172,15 @@ list(ebbe.with_next([1, 2, 3]))
 Iterate over items along with the information that the current item is the first one or not.
 
 ```python
-import ebbe
+from ebbe import with_is_first
 
-for is_first, item in ebbe.with_is_first(iterable):
+for is_first, item in with_is_first(iterable):
   if is_first:
     print(item, 'is first')
   else:
     print(item, 'is not first')
 
-list(ebbe.with_is_first([1, 2, 3]))
+list(with_is_first([1, 2, 3]))
 >>> [(True, 1), (False, 2), (False, 3)]
 ```
 
@@ -189,15 +189,15 @@ list(ebbe.with_is_first([1, 2, 3]))
 Iterate over items along with the information that the current item is the last one or not.
 
 ```python
-import ebbe
+from ebbe import with_is_last
 
-for is_last, item in ebbe.with_is_last(iterable):
+for is_last, item in with_is_last(iterable):
   if is_last:
     print(item, 'is last')
   else:
     print(item, 'is not last')
 
-list(ebbe.with_is_last([1, 2, 3]))
+list(with_is_last([1, 2, 3]))
 >>> [(False, 1), (False, 2), (True, 3)]
 ```
 
@@ -206,12 +206,12 @@ list(ebbe.with_is_last([1, 2, 3]))
 Iterate over the given iterator after skipping its first item. Can be useful if you want to skip headers of a CSV file for instance.
 
 ```python
-import ebbe
+from ebbe import without_first
 
-list(ebbe.without_first([1, 2, 3]))
+list(without_first([1, 2, 3]))
 >>> [2, 3]
 
-for row in ebbe.without_first(csv.reader(f)):
+for row in without_first(csv.reader(f)):
   print(row)
 ```
 
