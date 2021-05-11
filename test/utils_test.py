@@ -12,7 +12,8 @@ from ebbe import (
     pathgetter,
     sorted_uniq,
     indexed,
-    grouped
+    grouped,
+    partitioned
 )
 
 
@@ -156,7 +157,34 @@ class TestUtils(object):
             'not-ok': [0, 1, 4]
         }
 
-        assert grouped(chain(range(5), range(5)), set, key=lambda x: 'ok' if x in [2, 3] else 'not-ok') == {
+        assert grouped(chain(range(5), range(5)), container=set, key=lambda x: 'ok' if x in [2, 3] else 'not-ok') == {
             'ok': {2, 3},
             'not-ok': {0, 1, 4}
         }
+
+    def test_partitioned(self):
+        with pytest.raises(TypeError):
+            partitioned(None)
+
+        with pytest.raises(TypeError):
+            partitioned([], None)
+
+        with pytest.raises(TypeError):
+            partitioned([], key='test')
+
+        assert partitioned(chain(range(2), range(3), range(4))) == [
+            [0, 0, 0],
+            [1, 1, 1],
+            [2, 2],
+            [3]
+        ]
+
+        assert partitioned(range(5), key=lambda x: 'ok' if x in [2, 3] else 'not-ok') == [
+            [0, 1, 4],
+            [2, 3]
+        ]
+
+        assert partitioned(chain(range(5), range(5)), container=set, key=lambda x: 'ok' if x in [2, 3] else 'not-ok') == [
+            {0, 1, 4},
+            {2, 3}
+        ]

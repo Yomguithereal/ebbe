@@ -2,10 +2,14 @@
 # Ebbe Miscellaneous Helper Functions
 # =============================================================================
 #
-from collections import defaultdict
+from sys import version_info
+from collections import OrderedDict
 from collections.abc import Iterable
 
 from ebbe.iter import uniq
+
+AT_LEAST_PY37 = version_info >= (3, 7)
+DEFAULT_ORDERED_DICT = dict if AT_LEAST_PY37 else OrderedDict
 
 
 def noop(*args, **kwargs):
@@ -137,35 +141,41 @@ def indexed(iterable, factory=dict, *, key=None):
     return index
 
 
-def grouped(iterable, factory=list, *, key=None):
+def grouped(iterable, factory=dict, container=list, *, key=None):
     if not isinstance(iterable, Iterable):
         raise TypeError('target is not iterable')
 
     if not callable(factory):
         raise TypeError('factory is not callable')
 
+    if not callable(container):
+        raise TypeError('container is not callable')
+
     if key is not None and not callable(key):
         raise TypeError('key is not callable')
 
-    groups = defaultdict(factory)
+    groups = factory()
 
-    if hasattr(factory, 'add') and callable(factory.add):
-        adder = factory.add
-    elif hasattr(factory, 'append') and callable(factory.append):
-        adder = factory.append
+    if hasattr(container, 'add') and callable(container.add):
+        adder = container.add
+    elif hasattr(container, 'append') and callable(container.append):
+        adder = container.append
     else:
         raise TypeError('unknown container')
 
-    if key is not None:
-        for item in iterable:
-            k = key(item)
-            adder(groups[k], item)
-    else:
-        for item in iterable:
-            adder(groups[item], item)
+    for item in iterable:
+        k = key(item) if key is not None else item
+        c = groups.get(k)
+
+        if c is None:
+            c = container()
+            groups[k] = c
+
+        adder(c, item)
 
     return groups
 
 
-def partitioned(iterable, factory=list, *, key=None):
-    pass
+def partitioned(iterable, factory=DEFAULT_ORDERED_DICT, container=list, *, key=None):
+    groups = grouped(iterable, factory, container, key=key)
+    return list(groups.values())

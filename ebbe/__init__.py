@@ -22,5 +22,6 @@ from ebbe.utils import (
     pathgetter,
     sorted_uniq,
     indexed,
-    grouped
+    grouped,
+    partitioned
 )
