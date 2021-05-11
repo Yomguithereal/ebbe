@@ -75,6 +75,12 @@ class TestIter(object):
 
         assert result == []
 
+        tuples = [(11, 23), (1, 2), (2, 2), (3, 2), (1, 5), (1, 6)]
+
+        result = list(uniq(tuples, key=itemgetter(1)))
+
+        assert result == [(11, 23), (1, 2), (1, 5), (1, 6)]
+
     def test_distinct(self):
         a = [(1, 4), (1, 5), (2, 3), (4, 5), (2, 7), (6, 8), (2, 3)]
 

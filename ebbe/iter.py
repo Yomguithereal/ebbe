@@ -37,41 +37,40 @@ def fail_fast(iterable):
     return generator()
 
 
-def uniq(iterable):
-    current_item = None
+def uniq(iterable, *, key=None):
+    last_k = None
 
     for is_first, item in with_is_first(iterable):
+        k = item
+
+        if key is not None:
+            k = key(item)
+
         if is_first:
             yield item
-            current_item = item
         else:
-            if current_item == item:
+            if last_k == k:
                 continue
 
-            current_item = item
             yield item
+
+        last_k = k
 
 
 def distinct(iterable, *, key=None):
-    if key is not None and not callable(key):
-        raise TypeError('key is not callable')
+    already_seen = set()
 
-    def generator():
-        already_seen = set()
+    for item in iterable:
+        k = item
 
-        for item in iterable:
-            k = item
+        if key is not None:
+            k = key(item)
 
-            if key is not None:
-                k = key(item)
+        if k in already_seen:
+            continue
 
-            if k in already_seen:
-                continue
-
-            already_seen.add(k)
-            yield item
-
-    return generator()
+        already_seen.add(k)
+        yield item
 
 
 def with_prev(iterable):

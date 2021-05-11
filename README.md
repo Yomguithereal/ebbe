@@ -93,7 +93,7 @@ for i in gen:
 
 ### uniq
 
-Filter repeated items seen next to each other in the given iterator.
+Filter repeated items, optionally by key, seen next to each other in the given iterator.
 
 ```python
 import ebbe
@@ -104,6 +104,10 @@ list(ebbe.uniq([1, 1, 1, 2, 3, 4, 4, 5, 5, 6]))
 # BEWARE: it does not try to remember items (like the `uniq` command)
 list(ebbe.uniq([1, 2, 2, 3, 2]))
 >>> [1, 2, 3, 2]
+
+# Using a key
+list(ebbe.uniq([(1, 2), (1, 3), (2, 4)], key=lambda x: x[0]))
+>>> [(1, 2), (2, 4)]
 ```
 
 ### distinct

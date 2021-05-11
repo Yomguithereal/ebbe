@@ -113,7 +113,7 @@ def pathgetter(*paths, items=True, attributes=False, split_char=None,
     return operation
 
 
-def sorted_uniq(iterable, key=None, **kwargs):
+def sorted_uniq(iterable, *, key=None, **kwargs):
     started = False
     last_k = None
 
