@@ -2,6 +2,7 @@
 # Ebbe Miscellaneous Helper Functions
 # =============================================================================
 #
+from collections import defaultdict
 from collections.abc import Iterable
 
 from ebbe.iter import uniq
@@ -111,3 +112,48 @@ def pathgetter(*paths, items=True, attributes=False, split_char=None,
 
 def sorted_uniq(seq, **kwargs):
     return list(uniq(sorted(seq, **kwargs)))
+
+
+def indexed(iterable, factory=dict, *, key=None):
+    if not isinstance(iterable, Iterable):
+        raise TypeError('target is not iterable')
+
+    if not callable(factory):
+        raise TypeError('factory is not callable')
+
+    if not callable(key):
+        raise TypeError('key is not callable')
+
+    index = factory()
+
+    for item in iterable:
+        k = key(item)
+        index[k] = item
+
+    return index
+
+
+def grouped(iterable, factory=list, *, key=None):
+    if not isinstance(iterable, Iterable):
+        raise TypeError('target is not iterable')
+
+    if not callable(factory):
+        raise TypeError('factory is not callable')
+
+    if not callable(key):
+        raise TypeError('key is not callable')
+
+    groups = defaultdict(factory)
+
+    if hasattr(factory, 'add') and callable(factory.add):
+        adder = factory.add
+    elif hasattr(factory, 'append') and callable(factory.append):
+        adder = factory.append
+    else:
+        raise TypeError('unknown container')
+
+    for item in iterable:
+        k = key(item)
+        adder(groups[k], item)
+
+    return groups

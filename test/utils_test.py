@@ -2,13 +2,17 @@
 # Ebbe Utilities Unit Tests
 # =============================================================================
 import pytest
+from collections import OrderedDict
+from itertools import chain
 
 from ebbe import (
     get,
     getter,
     getpath,
     pathgetter,
-    sorted_uniq
+    sorted_uniq,
+    indexed,
+    grouped
 )
 
 
@@ -109,3 +113,47 @@ class TestUtils(object):
 
         assert sorted_uniq(numbers) == [-1, 1, 3, 4, 5, 17]
         assert sorted_uniq(numbers, reverse=True) == [17, 5, 4, 3, 1, -1]
+
+    def test_indexed(self):
+        with pytest.raises(TypeError):
+            indexed(None)
+
+        with pytest.raises(TypeError):
+            indexed([], None)
+
+        with pytest.raises(TypeError):
+            indexed([])
+
+        with pytest.raises(TypeError):
+            indexed([], key='test')
+
+        assert indexed(range(3), key=lambda x: x * 10) == {0: 0, 10: 1, 20: 2}
+        ordered = indexed(range(3), OrderedDict, key=lambda x: x * 10)
+
+        assert isinstance(ordered, OrderedDict)
+        assert ordered == OrderedDict([(0, 0), (10, 1), (20, 2)])
+
+        assert indexed(range(3), key=lambda x: x * 10) == {x * 10: x for x in range(3)}
+
+    def test_grouped(self):
+        with pytest.raises(TypeError):
+            grouped(None)
+
+        with pytest.raises(TypeError):
+            grouped([], None)
+
+        with pytest.raises(TypeError):
+            grouped([])
+
+        with pytest.raises(TypeError):
+            grouped([], key='test')
+
+        assert grouped(range(5), key=lambda x: 'ok' if x in [2, 3] else 'not-ok') == {
+            'ok': [2, 3],
+            'not-ok': [0, 1, 4]
+        }
+
+        assert grouped(chain(range(5), range(5)), set, key=lambda x: 'ok' if x in [2, 3] else 'not-ok') == {
+            'ok': {2, 3},
+            'not-ok': {0, 1, 4}
+        }

@@ -19,5 +19,7 @@ from ebbe.utils import (
     getter,
     getpath,
     pathgetter,
-    sorted_uniq
+    sorted_uniq,
+    indexed,
+    grouped
 )
