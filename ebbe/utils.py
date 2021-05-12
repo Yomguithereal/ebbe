@@ -5,7 +5,6 @@
 from sys import version_info
 from collections import OrderedDict
 from collections.abc import Iterable
-from typing import Iterable, Hashable
 
 AT_LEAST_PY37 = version_info >= (3, 7)
 DEFAULT_ORDERED_DICT = dict if AT_LEAST_PY37 else OrderedDict
@@ -199,18 +198,3 @@ def grouped(iterable, factory=dict, container=list, *, key=None):
 def partitioned(iterable, factory=DEFAULT_ORDERED_DICT, container=list, *, key=None):
     groups = grouped(iterable, factory, container, key=key)
     return list(groups.values())
-
-
-def labeled(iterable: Iterable[Iterable[Hashable]], *, key=None):
-
-    if key is not None and not callable(key):
-        raise TypeError('key is not callable')
-
-    labels = {}
-
-    for i, container in enumerate(iterable):
-        for item in container:
-            k = item if key is None else key(item)
-            labels[k] = i
-
-    return labels
