@@ -17,6 +17,7 @@ pip install ebbe
 *Iterator functions*
 
 * [as_chunks](#as_chunks)
+* [as_grams](#as_grams)
 * [fail_fast](#fail_fast)
 * [uniq](#uniq)
 * [distinct](#distinct)
@@ -53,6 +54,20 @@ from ebbe import as_chunks
 
 list(as_chunks(3, [1, 2, 3, 4, 5]))
 >>> [[1, 2, 3], [4, 5]]
+```
+
+### as_grams
+
+Iterate over grams (sometimes called n-grams or q-grams etc.) of the given iterable. It works with strings, lists and other sized sequences as well as with lazy iterables without consuming any superfluous memory while doing so.
+
+```python
+from ebbe import as_grams
+
+list(as_grams(3, 'hello'))
+>>> ['hel', 'ell', 'llo']
+
+list(as_grams(2, (i * 2 for i in range(5))))
+>>> [(0, 2), (2, 4), (4, 6), (6, 8)]
 ```
 
 ### fail_fast

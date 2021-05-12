@@ -2,6 +2,7 @@
 # Ebbe Iterating Functions
 # =============================================================================
 #
+from collections import deque
 from collections.abc import Sequence
 
 
@@ -29,11 +30,35 @@ def as_grams(size, iterable):
     if isinstance(iterable, Sequence):
         l = len(iterable)
 
+        if l == 0:
+            return
+
         if l < size:
             yield iterable[:]
 
         for i in range(l - size + 1):
             yield iterable[i:i + size]
+
+    # For lazy iterables
+    else:
+        iterator = iter(iterable)
+        buffer = deque()
+
+        while len(buffer) < size:
+            try:
+                buffer.append(next(iterator))
+            except StopIteration:
+                if buffer:
+                    yield tuple(i for i in buffer)
+
+                return
+
+        for item in iterator:
+            yield tuple(i for i in buffer)
+            buffer.popleft()
+            buffer.append(item)
+
+        yield tuple(i for i in buffer)
 
 
 def fail_fast(iterable):
