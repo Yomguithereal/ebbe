@@ -160,7 +160,7 @@ def indexed(iterable, factory=dict, *, key=None):
     return index
 
 
-def grouped(iterable, factory=dict, container=list, *, key=None):
+def grouped(iterable, factory=dict, container=list, *, key=None, value=None):
     if not isinstance(iterable, Iterable):
         raise TypeError('target is not iterable')
 
@@ -172,6 +172,9 @@ def grouped(iterable, factory=dict, container=list, *, key=None):
 
     if key is not None and not callable(key):
         raise TypeError('key is not callable')
+
+    if value is not None and not callable(value):
+        raise TypeError('value is not callable')
 
     groups = factory()
 
@@ -190,11 +193,12 @@ def grouped(iterable, factory=dict, container=list, *, key=None):
             c = container()
             groups[k] = c
 
-        adder(c, item)
+        v = item if value is None else value(item)
+        adder(c, v)
 
     return groups
 
 
-def partitioned(iterable, factory=DEFAULT_ORDERED_DICT, container=list, *, key=None):
-    groups = grouped(iterable, factory, container, key=key)
+def partitioned(iterable, factory=DEFAULT_ORDERED_DICT, container=list, *, key=None, value=None):
+    groups = grouped(iterable, factory, container, key=key, value=value)
     return list(groups.values())

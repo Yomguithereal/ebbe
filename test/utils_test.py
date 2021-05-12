@@ -156,12 +156,23 @@ class TestUtils(object):
             3: [3]
         }
 
-        assert grouped(range(5), key=lambda x: 'ok' if x in [2, 3] else 'not-ok') == {
+        def key(x):
+            return 'ok' if x in [2, 3] else 'not-ok'
+
+        def value(x):
+            return x * 10
+
+        assert grouped(range(5), key=key) == {
             'ok': [2, 3],
             'not-ok': [0, 1, 4]
         }
 
-        assert grouped(chain(range(5), range(5)), container=set, key=lambda x: 'ok' if x in [2, 3] else 'not-ok') == {
+        assert grouped(range(5), key=key, value=value) == {
+            'ok': [20, 30],
+            'not-ok': [0, 10, 40]
+        }
+
+        assert grouped(chain(range(5), range(5)), container=set, key=key) == {
             'ok': {2, 3},
             'not-ok': {0, 1, 4}
         }
@@ -183,12 +194,23 @@ class TestUtils(object):
             [3]
         ]
 
-        assert partitioned(range(5), key=lambda x: 'ok' if x in [2, 3] else 'not-ok') == [
+        def key(x):
+            return 'ok' if x in [2, 3] else 'not-ok'
+
+        def value(x):
+            return x * 10
+
+        assert partitioned(range(5), key=key) == [
             [0, 1, 4],
             [2, 3]
         ]
 
-        assert partitioned(chain(range(5), range(5)), container=set, key=lambda x: 'ok' if x in [2, 3] else 'not-ok') == [
+        assert partitioned(range(5), key=key, value=value) == [
+            [0, 10, 40],
+            [20, 30]
+        ]
+
+        assert partitioned(chain(range(5), range(5)), container=set, key=key) == [
             {0, 1, 4},
             {2, 3}
         ]
