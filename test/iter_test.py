@@ -6,6 +6,7 @@ from operator import itemgetter
 
 from ebbe import (
     as_chunks,
+    as_grams,
     fail_fast,
     uniq,
     distinct,
@@ -16,6 +17,24 @@ from ebbe import (
     with_is_last,
     without_first
 )
+
+STRING = 'Bonjour'
+
+STRING_TESTS = [
+    ('B', 'o', 'n', 'j', 'o', 'u', 'r'),
+    ('Bo', 'on', 'nj', 'jo', 'ou', 'ur'),
+    ('Bon', 'onj', 'njo', 'jou', 'our'),
+    ('Bonj', 'onjo', 'njou', 'jour')
+]
+
+SENTENCE = tuple('the cat eats the mouse'.split(' '))
+
+SENTENCE_TEST = [
+    (('the',), ('cat',), ('eats',), ('the',), ('mouse',)),
+    (('the', 'cat'), ('cat', 'eats'), ('eats', 'the'), ('the', 'mouse')),
+    (('the', 'cat', 'eats'), ('cat', 'eats', 'the'), ('eats', 'the', 'mouse')),
+    (('the', 'cat', 'eats', 'the'), ('cat', 'eats', 'the', 'mouse'))
+]
 
 
 class TestIter(object):
@@ -45,6 +64,11 @@ class TestIter(object):
         result = list(as_chunks(3, []))
 
         assert result == []
+
+    def test_as_grams(self):
+        for i in range(4):
+            assert tuple(as_grams(i + 1, STRING)) == STRING_TESTS[i]
+            assert tuple(as_grams(i + 1, SENTENCE)) == SENTENCE_TEST[i]
 
     def test_fail_fast(self):
         def hellraiser():

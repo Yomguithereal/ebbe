@@ -4,6 +4,7 @@
 #
 from ebbe.iter import (
     as_chunks,
+    as_grams,
     fail_fast,
     uniq,
     distinct,

@@ -2,6 +2,7 @@
 # Ebbe Iterating Functions
 # =============================================================================
 #
+from collections.abc import Sequence
 
 
 def empty_generator():
@@ -20,6 +21,19 @@ def as_chunks(size, iterable):
 
     if chunk:
         yield chunk
+
+
+def as_grams(size, iterable):
+
+    # For sized sequences
+    if isinstance(iterable, Sequence):
+        l = len(iterable)
+
+        if l < size:
+            yield iterable[:]
+
+        for i in range(l - size + 1):
+            yield iterable[i:i + size]
 
 
 def fail_fast(iterable):
