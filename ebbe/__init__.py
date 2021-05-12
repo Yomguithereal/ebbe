@@ -24,5 +24,7 @@ from ebbe.utils import (
     sorted_uniq,
     indexed,
     grouped,
-    partitioned
+    partitioned,
+    grouped_items,
+    partitioned_items
 )

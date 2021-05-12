@@ -202,3 +202,39 @@ def grouped(iterable, factory=dict, container=list, *, key=None, value=None):
 def partitioned(iterable, factory=DEFAULT_ORDERED_DICT, container=list, *, key=None, value=None):
     groups = grouped(iterable, factory, container, key=key, value=value)
     return list(groups.values())
+
+
+def grouped_items(iterable, factory=dict, container=list):
+    if not isinstance(iterable, Iterable):
+        raise TypeError('target is not iterable')
+
+    if not callable(factory):
+        raise TypeError('factory is not callable')
+
+    if not callable(container):
+        raise TypeError('container is not callable')
+
+    groups = factory()
+
+    if hasattr(container, 'add') and callable(container.add):
+        adder = container.add
+    elif hasattr(container, 'append') and callable(container.append):
+        adder = container.append
+    else:
+        raise TypeError('unknown container')
+
+    for k, v in iterable:
+        c = groups.get(k)
+
+        if c is None:
+            c = container()
+            groups[k] = c
+
+        adder(c, v)
+
+    return groups
+
+
+def partitioned_items(iterable, factory=DEFAULT_ORDERED_DICT, container=list):
+    groups = grouped_items(iterable, factory, container)
+    return list(groups.values())

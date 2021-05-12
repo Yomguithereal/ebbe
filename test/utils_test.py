@@ -13,7 +13,9 @@ from ebbe import (
     sorted_uniq,
     indexed,
     grouped,
-    partitioned
+    partitioned,
+    grouped_items,
+    partitioned_items
 )
 
 
@@ -172,6 +174,11 @@ class TestUtils(object):
             'not-ok': [0, 10, 40]
         }
 
+        assert grouped_items((key(x), x * 10) for x in range(5)) == {
+            'ok': [20, 30],
+            'not-ok': [0, 10, 40]
+        }
+
         assert grouped(chain(range(5), range(5)), container=set, key=key) == {
             'ok': {2, 3},
             'not-ok': {0, 1, 4}
@@ -206,6 +213,11 @@ class TestUtils(object):
         ]
 
         assert partitioned(range(5), key=key, value=value) == [
+            [0, 10, 40],
+            [20, 30]
+        ]
+
+        assert partitioned_items((key(x), x * 10) for x in range(5)) == [
             [0, 10, 40],
             [20, 30]
         ]

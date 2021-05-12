@@ -391,6 +391,22 @@ grouped(range(4), key=lambda x: x % 2)
   0: [0, 2],
   1: [1, 3]
 }
+
+# Using an optional value
+grouped(range(4), key=lambda x: x % 2, value=lambda x: x * 10)
+>>> {
+  0: [0, 20],
+  1: [10, 30]
+}
+
+# Using the items variant
+from ebbe import grouped_items
+
+grouped_items((x % 2, x * 10) for i in range(4))
+>>> {
+  0: [0, 20],
+  1: [10, 30]
+}
 ```
 
 ### partitioned
@@ -404,6 +420,22 @@ partitioned(range(4), key=lambda x: x % 2)
 >>> [
   [0, 2],
   [1, 3]
+]
+
+# Using an optional value
+partitioned(range(4), key=lambda x: x % 2, value=lambda x: x * 10)
+>>> [
+  [0, 20],
+  [10, 30]
+]
+
+# Using the items variant
+from ebbe import partitioned_items
+
+partitioned_items((x % 2, x * 10) for i in range(4))
+>>> [
+  [0, 20],
+  [10, 30]
 ]
 ```
 
