@@ -4,27 +4,62 @@
 #
 
 
-def prettyprint_int(n):
-    return "{:,}".format(int(n))
+def prettyprint_int(n, separator=","):
+    s = "{:,}".format(int(n))
+
+    if separator != ",":
+        return s.replace(",", separator)
+
+    return s
+
+
+def and_join(v, separator=",", copula="and"):
+    if len(v) < 2:
+        return separator.join(v)
+
+    separator = separator.rstrip(" ") + " "
+
+    return separator.join(v[:-1]) + " " + copula + " " + v[-1]
 
 
 INTERVALS = [
-    ("weeks", 60 * 60 * 24 * 7),  # 60 * 60 * 24 * 7
-    ("days", 60 * 60 * 24),  # 60 * 60 * 24
-    ("hours", 60 * 60),  # 60 * 60
+    ("years", 365),
+    ("weeks", 7),
+    ("days", 24),
+    ("hours", 60),
     ("minutes", 60),
-    ("seconds", 1),
+    ("seconds", 1000),
+    ("milliseconds", 1000),
+    ("microseconds", 1000),
+    ("nanoseconds", 1),
 ]
 
+cumprod = 1
 
-def prettyprint_seconds(seconds, granularity=None):
+for i in range(len(INTERVALS) - 1, -1, -1):
+    name, value = INTERVALS[i]
+    cumprod *= value
+    INTERVALS[i] = (name, cumprod)
+
+INTERVAL_PRECISION = {n: len(INTERVALS) - i for i, n in enumerate(INTERVALS)}
+
+
+def prettyprint_nanoseconds(nanoseconds, precision=None):
+    clamp = None
+
+    if precision is not None:
+        clamp = INTERVAL_PRECISION.get(precision)
+
+        if clamp is None:
+            raise TypeError('invalid precision "%s"' % precision)
+
     result = []
 
     for name, count in INTERVALS:
-        value = seconds // count
+        value = nanoseconds // count
 
         if value:
-            seconds -= value * count
+            nanoseconds -= value * count
 
             if value == 1:
                 name = name.rstrip("s")
@@ -32,9 +67,9 @@ def prettyprint_seconds(seconds, granularity=None):
             result.append("%i %s" % (value, name))
 
     if not result:
-        return "%.2f seconds" % seconds
+        return "%.3f nanoseconds" % nanoseconds
 
-    if granularity is not None:
-        result = result[:granularity]
+    if clamp is not None:
+        result = result[:clamp]
 
-    return ", ".join(result)
+    return and_join(result)
