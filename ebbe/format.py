@@ -2,10 +2,11 @@
 # Ebbe Formatting Helpers
 # =============================================================================
 #
+from typing import Iterable
 from functools import partial
 
 
-def prettyprint_int(n, separator=","):
+def prettyprint_int(n: float, separator: str = ",") -> str:
     s = "{:,}".format(int(n))
 
     if separator != ",":
@@ -14,7 +15,7 @@ def prettyprint_int(n, separator=","):
     return s
 
 
-def and_join(v, separator=",", copula="and"):
+def and_join(v: Iterable[str], separator: str = ",", copula: str = "and"):
     if not isinstance(v, list):
         v = list(v)
 
@@ -49,7 +50,7 @@ for i in range(len(INTERVALS) - 1, -1, -1):
 INTERVAL_CONVERSION = {t[0]: t[1] for t in INTERVALS}
 
 
-def format_time_item(value, unit):
+def format_time_item(value: float, unit: str) -> str:
     if value == 0:
         return "0 %s" % unit
 
@@ -62,7 +63,9 @@ def format_time_item(value, unit):
     return "%i %s" % (value, unit)
 
 
-def prettyprint_time(time, precision="nanoseconds", unit="nanoseconds"):
+def prettyprint_time(
+    time: float, precision: str = "nanoseconds", unit: str = "nanoseconds"
+) -> str:
     unit = unit.rstrip("s") + "s"
     precision = precision.rstrip("s") + "s"
 
