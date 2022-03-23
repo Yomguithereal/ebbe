@@ -5,13 +5,14 @@
 import sys
 from timeit import default_timer as timer
 
-from ebbe.format import prettyprint_nanoseconds
+from ebbe.format import prettyprint_time
 
 
 class Timer(object):
-    def __init__(self, name="Timer", file=sys.stderr):
+    def __init__(self, name="Timer", file=sys.stderr, unit="milliseconds"):
         self.name = name
         self.file = file
+        self.unit = unit
 
     def __enter__(self):
         self.start = timer()
@@ -19,4 +20,8 @@ class Timer(object):
     def __exit__(self, *args):
         self.end = timer()
         self.duration = self.end - self.start
-        print("%s:" % self.name, prettyprint_nanoseconds(self.duration), file=self.file)
+        print(
+            "%s:" % self.name,
+            prettyprint_time(self.duration, unit="milliseconds"),
+            file=self.file,
+        )

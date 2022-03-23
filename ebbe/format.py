@@ -2,6 +2,7 @@
 # Ebbe Formatting Helpers
 # =============================================================================
 #
+from functools import partial
 
 
 def prettyprint_int(n, separator=","):
@@ -41,35 +42,51 @@ for i in range(len(INTERVALS) - 1, -1, -1):
     cumprod *= value
     INTERVALS[i] = (name, cumprod)
 
-INTERVAL_PRECISION = {n: len(INTERVALS) - i for i, n in enumerate(INTERVALS)}
+
+INTERVAL_CONVERSION = {t[0]: t[1] for t in INTERVALS}
 
 
-def prettyprint_nanoseconds(nanoseconds, precision=None):
-    clamp = None
+def prettyprint_time(time, precision="nanoseconds", unit="nanoseconds"):
+    unit = unit.rstrip("s") + "s"
+    precision = precision.rstrip("s") + "s"
 
-    if precision is not None:
-        clamp = INTERVAL_PRECISION.get(precision)
+    if unit != "nanoseconds":
+        conversion = INTERVAL_CONVERSION.get(unit)
 
-        if clamp is None:
-            raise TypeError('invalid precision "%s"' % precision)
+        if conversion is None:
+            raise TypeError('invalid unit "%s"' % unit)
+
+        time *= conversion
+
+    if precision not in INTERVAL_CONVERSION:
+        raise TypeError('invalid precision "%s"' % precision)
 
     result = []
 
     for name, count in INTERVALS:
-        value = nanoseconds // count
+        value = time // count
 
         if value:
-            nanoseconds -= value * count
+            time -= value * count
+
+            formatted_name = name
 
             if value == 1:
-                name = name.rstrip("s")
+                formatted_name = name.rstrip("s")
 
-            result.append("%i %s" % (value, name))
+            result.append("%i %s" % (value, formatted_name))
+
+        if name == unit:
+            time /= count
+            break
+
+        elif name == precision:
+            break
 
     if not result:
-        return "%.3f nanoseconds" % nanoseconds
-
-    if clamp is not None:
-        result = result[:clamp]
+        return "%.3f %s" % (time, unit)
 
     return and_join(result)
+
+
+prettyprint_seconds = partial(prettyprint_time, unit="seconds", precision="seconds")
