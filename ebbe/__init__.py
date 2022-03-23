@@ -2,6 +2,7 @@
 # Ebbe Library Enpoint
 # =============================================================================
 #
+from ebbe.benchmark import Timer
 from ebbe.iter import (
     as_chunks,
     as_grams,
@@ -14,6 +15,10 @@ from ebbe.iter import (
     with_is_first,
     with_is_last,
     without_first
+)
+from ebbe.format import (
+    prettyprint_int,
+    prettyprint_seconds
 )
 from ebbe.utils import (
     noop,

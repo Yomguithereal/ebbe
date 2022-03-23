@@ -45,6 +45,12 @@ pip install ebbe
 * [decorators.fail_fast](#decoratorsfail_fast)
 * [decorators.with_defer](#decoratorswith_defer)
 
+*Undocumented*
+
+* `Timer`
+* `prettyprint_int`
+* `prettyprint_seconds`
+
 ### as_chunks
 
 Iterate over chunks of the desired size by grouping items as we iterate over them.
