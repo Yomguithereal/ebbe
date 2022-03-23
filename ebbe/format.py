@@ -84,7 +84,7 @@ def prettyprint_time(time, precision="nanoseconds", unit="nanoseconds"):
             break
 
     if not result:
-        return "%.3f %s" % (time, unit)
+        return ("%.3f" % time).rstrip("0") + " " + unit
 
     return and_join(result)
 

@@ -9,10 +9,10 @@ from ebbe.format import prettyprint_time
 
 
 class Timer(object):
-    def __init__(self, name="Timer", file=sys.stderr, unit="milliseconds"):
+    def __init__(self, name="Timer", file=sys.stderr, precision="nanoseconds"):
         self.name = name
         self.file = file
-        self.unit = unit
+        self.precision = precision
 
     def __enter__(self):
         self.start = timer()
@@ -22,6 +22,6 @@ class Timer(object):
         self.duration = self.end - self.start
         print(
             "%s:" % self.name,
-            prettyprint_time(self.duration, unit="milliseconds"),
+            prettyprint_time(self.duration, precision=self.precision, unit="seconds"),
             file=self.file,
         )

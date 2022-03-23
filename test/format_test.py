@@ -34,6 +34,7 @@ class TestDecorators(object):
             == "1 hour and 21 minutes"
         )
         assert prettyprint_time(0.48680) == "0.487 nanoseconds"
+        assert prettyprint_time(0.48000) == "0.48 nanoseconds"
         assert prettyprint_time(78, unit="seconds") == "1 minute and 18 seconds"
         assert prettyprint_time(0.49704864, unit="seconds") == "0.497 seconds"
         assert (
