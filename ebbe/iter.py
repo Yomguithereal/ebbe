@@ -37,7 +37,7 @@ def as_grams(size, iterable):
             yield iterable[:]
 
         for i in range(l - size + 1):
-            yield iterable[i:i + size]
+            yield iterable[i : i + size]
 
     # For lazy iterables
     else:

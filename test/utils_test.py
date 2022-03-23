@@ -15,7 +15,7 @@ from ebbe import (
     grouped,
     partitioned,
     grouped_items,
-    partitioned_items
+    partitioned_items,
 )
 
 
@@ -29,52 +29,53 @@ class Container(object):
 
 
 NESTED_OBJECT = {
-    'a': {
-        'b': [{'c': 4}, 45, {'f': [1, 2, 3]}],
-        'd': {
-            'e': 5,
-            'g': Container(45)
-        }
-    },
-    't': 32
+    "a": {"b": [{"c": 4}, 45, {"f": [1, 2, 3]}], "d": {"e": 5, "g": Container(45)}},
+    "t": 32,
 }
 
 
 class TestUtils(object):
     def test_get(self):
-        assert get(NESTED_OBJECT, 't') == 32
-        assert get(NESTED_OBJECT, 'l') is None
-        assert get(NESTED_OBJECT, 'l', 27) == 27
+        assert get(NESTED_OBJECT, "t") == 32
+        assert get(NESTED_OBJECT, "l") is None
+        assert get(NESTED_OBJECT, "l", 27) == 27
 
         assert get([0, 2, 4], 1) == 2
         assert get([0, 2, 4], 7) is None
 
     def test_getter(self):
-        assert getter('t')(NESTED_OBJECT) == 32
-        assert getter('l')(NESTED_OBJECT) is None
-        assert getter('l', 27)(NESTED_OBJECT) == 27
-        assert getter('l')(NESTED_OBJECT, 28) == 28
-        assert getter('l', 27)(NESTED_OBJECT, 28) == 28
+        assert getter("t")(NESTED_OBJECT) == 32
+        assert getter("l")(NESTED_OBJECT) is None
+        assert getter("l", 27)(NESTED_OBJECT) == 27
+        assert getter("l")(NESTED_OBJECT, 28) == 28
+        assert getter("l", 27)(NESTED_OBJECT, 28) == 28
 
     def test_getpath(self):
         with pytest.raises(TypeError):
-            getpath(NESTED_OBJECT, 'test')
+            getpath(NESTED_OBJECT, "test")
 
-        assert getpath(NESTED_OBJECT, ['a', 'd', 'e']) == 5
-        assert getpath(NESTED_OBJECT, ['a', 'd', 'e'], items=None) is None
-        assert getpath(NESTED_OBJECT, ['a', 'c']) is None
-        assert getpath(NESTED_OBJECT, ['a', 'c'], 67) == 67
-        assert getpath(NESTED_OBJECT, ['a', 'b', 1]) == 45
-        assert getpath(NESTED_OBJECT, ['a', 'b', -1, 'f', -1]) == 3
-        assert getpath(NESTED_OBJECT, ['a', 'b', 0, 'c']) == 4
-        assert getpath(NESTED_OBJECT, ['a', 'd', 'g', 'numbers', 1]) is None
-        assert getpath(NESTED_OBJECT, ['a', 'd', 'g', 'numbers', 1], attributes=True) == 5
-        assert getpath(NESTED_OBJECT, ['a', 'd', 'g', 3], attributes=True) is None
-        assert getpath(NESTED_OBJECT, ['a', 'd', 'g', 'recursion', 'numbers'], attributes=True) == [4, 5, 6]
-        assert getpath(NESTED_OBJECT, 'a.d.e', split_char='.') == 5
-        assert getpath(NESTED_OBJECT, 'a§d§e', split_char='§') == 5
-        assert getpath(NESTED_OBJECT, 'a.b.1', split_char='.', parse_indices=True) == 45
-        assert getpath(NESTED_OBJECT, 'a.b.-1.f.-1', split_char='.', parse_indices=True) == 3
+        assert getpath(NESTED_OBJECT, ["a", "d", "e"]) == 5
+        assert getpath(NESTED_OBJECT, ["a", "d", "e"], items=None) is None
+        assert getpath(NESTED_OBJECT, ["a", "c"]) is None
+        assert getpath(NESTED_OBJECT, ["a", "c"], 67) == 67
+        assert getpath(NESTED_OBJECT, ["a", "b", 1]) == 45
+        assert getpath(NESTED_OBJECT, ["a", "b", -1, "f", -1]) == 3
+        assert getpath(NESTED_OBJECT, ["a", "b", 0, "c"]) == 4
+        assert getpath(NESTED_OBJECT, ["a", "d", "g", "numbers", 1]) is None
+        assert (
+            getpath(NESTED_OBJECT, ["a", "d", "g", "numbers", 1], attributes=True) == 5
+        )
+        assert getpath(NESTED_OBJECT, ["a", "d", "g", 3], attributes=True) is None
+        assert getpath(
+            NESTED_OBJECT, ["a", "d", "g", "recursion", "numbers"], attributes=True
+        ) == [4, 5, 6]
+        assert getpath(NESTED_OBJECT, "a.d.e", split_char=".") == 5
+        assert getpath(NESTED_OBJECT, "a§d§e", split_char="§") == 5
+        assert getpath(NESTED_OBJECT, "a.b.1", split_char=".", parse_indices=True) == 45
+        assert (
+            getpath(NESTED_OBJECT, "a.b.-1.f.-1", split_char=".", parse_indices=True)
+            == 3
+        )
 
         assert getpath([[1, 2]], [3, 4, 17]) is None
 
@@ -82,31 +83,37 @@ class TestUtils(object):
         with pytest.raises(TypeError):
             pathgetter()
 
-        assert pathgetter(['a', 'd', 'e'])(NESTED_OBJECT) == 5
-        assert pathgetter(['a', 'd', 'e'], items=None)(NESTED_OBJECT) is None
-        assert pathgetter(['a', 'c'])(NESTED_OBJECT) is None
-        assert pathgetter(['a', 'c'])(NESTED_OBJECT, 67) == 67
-        assert pathgetter(['a', 'b', 1])(NESTED_OBJECT) == 45
-        assert pathgetter(['a', 'b', -1, 'f', -1])(NESTED_OBJECT) == 3
-        assert pathgetter(['a', 'b', 0, 'c'])(NESTED_OBJECT) == 4
-        assert pathgetter(['a', 'd', 'g', 'numbers', 1])(NESTED_OBJECT) is None
-        assert pathgetter(['a', 'd', 'g', 'numbers', 1], attributes=True)(NESTED_OBJECT) == 5
-        assert pathgetter(['a', 'd', 'g', 3], attributes=True)(NESTED_OBJECT) is None
-        assert pathgetter(['a', 'd', 'g', 'recursion', 'numbers'], attributes=True)(NESTED_OBJECT) == [4, 5, 6]
-        assert pathgetter('a.d.e', split_char='.')(NESTED_OBJECT) == 5
-        assert pathgetter('a§d§e', split_char='§')(NESTED_OBJECT) == 5
-        assert pathgetter('a.b.1', split_char='.', parse_indices=True)(NESTED_OBJECT) == 45
-        assert pathgetter('a.b.-1.f.-1', split_char='.', parse_indices=True)(NESTED_OBJECT) == 3
-
-        tuple_getter = pathgetter(
-            ['a', 'd', 'e'],
-            ['a', 'c'],
-            ['a', 'b', 1]
+        assert pathgetter(["a", "d", "e"])(NESTED_OBJECT) == 5
+        assert pathgetter(["a", "d", "e"], items=None)(NESTED_OBJECT) is None
+        assert pathgetter(["a", "c"])(NESTED_OBJECT) is None
+        assert pathgetter(["a", "c"])(NESTED_OBJECT, 67) == 67
+        assert pathgetter(["a", "b", 1])(NESTED_OBJECT) == 45
+        assert pathgetter(["a", "b", -1, "f", -1])(NESTED_OBJECT) == 3
+        assert pathgetter(["a", "b", 0, "c"])(NESTED_OBJECT) == 4
+        assert pathgetter(["a", "d", "g", "numbers", 1])(NESTED_OBJECT) is None
+        assert (
+            pathgetter(["a", "d", "g", "numbers", 1], attributes=True)(NESTED_OBJECT)
+            == 5
         )
+        assert pathgetter(["a", "d", "g", 3], attributes=True)(NESTED_OBJECT) is None
+        assert pathgetter(["a", "d", "g", "recursion", "numbers"], attributes=True)(
+            NESTED_OBJECT
+        ) == [4, 5, 6]
+        assert pathgetter("a.d.e", split_char=".")(NESTED_OBJECT) == 5
+        assert pathgetter("a§d§e", split_char="§")(NESTED_OBJECT) == 5
+        assert (
+            pathgetter("a.b.1", split_char=".", parse_indices=True)(NESTED_OBJECT) == 45
+        )
+        assert (
+            pathgetter("a.b.-1.f.-1", split_char=".", parse_indices=True)(NESTED_OBJECT)
+            == 3
+        )
+
+        tuple_getter = pathgetter(["a", "d", "e"], ["a", "c"], ["a", "b", 1])
 
         assert tuple_getter(NESTED_OBJECT) == (5, None, 45)
 
-        default_getter = pathgetter(['a', 'd', 'e'], default=1337)
+        default_getter = pathgetter(["a", "d", "e"], default=1337)
 
         assert default_getter(NESTED_OBJECT) == 5
         assert default_getter({}) == 1337
@@ -129,7 +136,7 @@ class TestUtils(object):
             indexed([], None)
 
         with pytest.raises(TypeError):
-            indexed([], key='test')
+            indexed([], key="test")
 
         assert indexed(range(3)) == {0: 0, 1: 1, 2: 2}
 
@@ -149,39 +156,36 @@ class TestUtils(object):
             grouped([], None)
 
         with pytest.raises(TypeError):
-            grouped([], key='test')
+            grouped([], key="test")
 
         assert grouped(chain(range(2), range(3), range(4))) == {
             0: [0, 0, 0],
             1: [1, 1, 1],
             2: [2, 2],
-            3: [3]
+            3: [3],
         }
 
         def key(x):
-            return 'ok' if x in [2, 3] else 'not-ok'
+            return "ok" if x in [2, 3] else "not-ok"
 
         def value(x):
             return x * 10
 
-        assert grouped(range(5), key=key) == {
-            'ok': [2, 3],
-            'not-ok': [0, 1, 4]
-        }
+        assert grouped(range(5), key=key) == {"ok": [2, 3], "not-ok": [0, 1, 4]}
 
         assert grouped(range(5), key=key, value=value) == {
-            'ok': [20, 30],
-            'not-ok': [0, 10, 40]
+            "ok": [20, 30],
+            "not-ok": [0, 10, 40],
         }
 
         assert grouped_items((key(x), x * 10) for x in range(5)) == {
-            'ok': [20, 30],
-            'not-ok': [0, 10, 40]
+            "ok": [20, 30],
+            "not-ok": [0, 10, 40],
         }
 
         assert grouped(chain(range(5), range(5)), container=set, key=key) == {
-            'ok': {2, 3},
-            'not-ok': {0, 1, 4}
+            "ok": {2, 3},
+            "not-ok": {0, 1, 4},
         }
 
     def test_partitioned(self):
@@ -192,37 +196,31 @@ class TestUtils(object):
             partitioned([], None)
 
         with pytest.raises(TypeError):
-            partitioned([], key='test')
+            partitioned([], key="test")
 
         assert partitioned(chain(range(2), range(3), range(4))) == [
             [0, 0, 0],
             [1, 1, 1],
             [2, 2],
-            [3]
+            [3],
         ]
 
         def key(x):
-            return 'ok' if x in [2, 3] else 'not-ok'
+            return "ok" if x in [2, 3] else "not-ok"
 
         def value(x):
             return x * 10
 
-        assert partitioned(range(5), key=key) == [
-            [0, 1, 4],
-            [2, 3]
-        ]
+        assert partitioned(range(5), key=key) == [[0, 1, 4], [2, 3]]
 
-        assert partitioned(range(5), key=key, value=value) == [
-            [0, 10, 40],
-            [20, 30]
-        ]
+        assert partitioned(range(5), key=key, value=value) == [[0, 10, 40], [20, 30]]
 
         assert partitioned_items((key(x), x * 10) for x in range(5)) == [
             [0, 10, 40],
-            [20, 30]
+            [20, 30],
         ]
 
         assert partitioned(chain(range(5), range(5)), container=set, key=key) == [
             {0, 1, 4},
-            {2, 3}
+            {2, 3},
         ]

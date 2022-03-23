@@ -15,25 +15,25 @@ from ebbe import (
     with_next,
     with_is_first,
     with_is_last,
-    without_first
+    without_first,
 )
 
-STRING = 'Bonjour'
+STRING = "Bonjour"
 
 STRING_TESTS = [
-    ('B', 'o', 'n', 'j', 'o', 'u', 'r'),
-    ('Bo', 'on', 'nj', 'jo', 'ou', 'ur'),
-    ('Bon', 'onj', 'njo', 'jou', 'our'),
-    ('Bonj', 'onjo', 'njou', 'jour')
+    ("B", "o", "n", "j", "o", "u", "r"),
+    ("Bo", "on", "nj", "jo", "ou", "ur"),
+    ("Bon", "onj", "njo", "jou", "our"),
+    ("Bonj", "onjo", "njou", "jour"),
 ]
 
-SENTENCE = tuple('the cat eats the mouse'.split(' '))
+SENTENCE = tuple("the cat eats the mouse".split(" "))
 
 SENTENCE_TEST = [
-    (('the',), ('cat',), ('eats',), ('the',), ('mouse',)),
-    (('the', 'cat'), ('cat', 'eats'), ('eats', 'the'), ('the', 'mouse')),
-    (('the', 'cat', 'eats'), ('cat', 'eats', 'the'), ('eats', 'the', 'mouse')),
-    (('the', 'cat', 'eats', 'the'), ('cat', 'eats', 'the', 'mouse'))
+    (("the",), ("cat",), ("eats",), ("the",), ("mouse",)),
+    (("the", "cat"), ("cat", "eats"), ("eats", "the"), ("the", "mouse")),
+    (("the", "cat", "eats"), ("cat", "eats", "the"), ("eats", "the", "mouse")),
+    (("the", "cat", "eats", "the"), ("cat", "eats", "the", "mouse")),
 ]
 
 
@@ -70,21 +70,29 @@ class TestIter(object):
             assert tuple(as_grams(i + 1, STRING)) == STRING_TESTS[i]
             assert tuple(as_grams(i + 1, SENTENCE)) == SENTENCE_TEST[i]
 
-        assert list(as_grams(4, '')) == []
-        assert list(as_grams(4, 'te')) == ['te']
-        assert list(as_grams(4, 'test')) == ['test']
-        assert list(as_grams(4, 'teste')) == ['test', 'este']
+        assert list(as_grams(4, "")) == []
+        assert list(as_grams(4, "te")) == ["te"]
+        assert list(as_grams(4, "test")) == ["test"]
+        assert list(as_grams(4, "teste")) == ["test", "este"]
 
         for i in range(4):
             assert tuple(as_grams(i + 1, (w for w in SENTENCE))) == SENTENCE_TEST[i]
 
         assert list(as_grams(4, iter([]))) == []
-        assert list(as_grams(4, iter(SENTENCE[:2]))) == [('the', 'cat')]
-        assert list(as_grams(4, iter(SENTENCE[:3]))) == [('the', 'cat', 'eats')]
-        assert list(as_grams(4, iter(SENTENCE[:4]))) == [('the', 'cat', 'eats', 'the')]
-        assert list(as_grams(4, iter(SENTENCE[:5]))) == [('the', 'cat', 'eats', 'the'), ('cat', 'eats', 'the', 'mouse')]
+        assert list(as_grams(4, iter(SENTENCE[:2]))) == [("the", "cat")]
+        assert list(as_grams(4, iter(SENTENCE[:3]))) == [("the", "cat", "eats")]
+        assert list(as_grams(4, iter(SENTENCE[:4]))) == [("the", "cat", "eats", "the")]
+        assert list(as_grams(4, iter(SENTENCE[:5]))) == [
+            ("the", "cat", "eats", "the"),
+            ("cat", "eats", "the", "mouse"),
+        ]
 
-        assert list(as_grams(2, (i * 2 for i in range(5)))) == [(0, 2), (2, 4), (4, 6), (6, 8)]
+        assert list(as_grams(2, (i * 2 for i in range(5)))) == [
+            (0, 2),
+            (2, 4),
+            (4, 6),
+            (6, 8),
+        ]
 
     def test_fail_fast(self):
         def hellraiser():

@@ -38,7 +38,7 @@ def parse_index(value):
         return value
 
 
-def parse_path(string, *, split_char='.', parse_indices=False):
+def parse_path(string, *, split_char=".", parse_indices=False):
     path = string.split(split_char)
 
     if parse_indices:
@@ -47,8 +47,16 @@ def parse_path(string, *, split_char='.', parse_indices=False):
     return path
 
 
-def getpath(target, path, default=None, *, items=True, attributes=False,
-            split_char=None, parse_indices=False):
+def getpath(
+    target,
+    path,
+    default=None,
+    *,
+    items=True,
+    attributes=False,
+    split_char=None,
+    parse_indices=False
+):
 
     if split_char is not None:
         if isinstance(path, str):
@@ -58,7 +66,7 @@ def getpath(target, path, default=None, *, items=True, attributes=False,
             raise TypeError
 
     for step in path:
-        if items and callable(getattr(target, '__getitem__', None)):
+        if items and callable(getattr(target, "__getitem__", None)):
             try:
                 target = target[step]
             except (IndexError, KeyError):
@@ -74,8 +82,14 @@ def getpath(target, path, default=None, *, items=True, attributes=False,
     return target
 
 
-def pathgetter(*paths, items=True, attributes=False, split_char=None,
-               parse_indices=False, default=None):
+def pathgetter(
+    *paths,
+    items=True,
+    attributes=False,
+    split_char=None,
+    parse_indices=False,
+    default=None
+):
 
     if not paths:
         raise TypeError
@@ -88,24 +102,17 @@ def pathgetter(*paths, items=True, attributes=False, split_char=None,
         ]
 
     if len(paths) == 1:
+
         def operation(target, default=default):
             return getpath(
-                target,
-                paths[0],
-                default,
-                items=items,
-                attributes=attributes
+                target, paths[0], default, items=items, attributes=attributes
             )
+
     else:
+
         def operation(target, default=default):
             return tuple(
-                getpath(
-                    target,
-                    path,
-                    default,
-                    items=items,
-                    attributes=attributes
-                )
+                getpath(target, path, default, items=items, attributes=attributes)
                 for path in paths
             )
 
@@ -139,13 +146,13 @@ def sorted_uniq(iterable, *, key=None, **kwargs):
 
 def indexed(iterable, factory=dict, *, key=None):
     if not isinstance(iterable, Iterable):
-        raise TypeError('target is not iterable')
+        raise TypeError("target is not iterable")
 
     if not callable(factory):
-        raise TypeError('factory is not callable')
+        raise TypeError("factory is not callable")
 
     if key is not None and not callable(key):
-        raise TypeError('key is not callable')
+        raise TypeError("key is not callable")
 
     index = factory()
 
@@ -162,28 +169,28 @@ def indexed(iterable, factory=dict, *, key=None):
 
 def grouped(iterable, factory=dict, container=list, *, key=None, value=None):
     if not isinstance(iterable, Iterable):
-        raise TypeError('target is not iterable')
+        raise TypeError("target is not iterable")
 
     if not callable(factory):
-        raise TypeError('factory is not callable')
+        raise TypeError("factory is not callable")
 
     if not callable(container):
-        raise TypeError('container is not callable')
+        raise TypeError("container is not callable")
 
     if key is not None and not callable(key):
-        raise TypeError('key is not callable')
+        raise TypeError("key is not callable")
 
     if value is not None and not callable(value):
-        raise TypeError('value is not callable')
+        raise TypeError("value is not callable")
 
     groups = factory()
 
-    if hasattr(container, 'add') and callable(container.add):
+    if hasattr(container, "add") and callable(container.add):
         adder = container.add
-    elif hasattr(container, 'append') and callable(container.append):
+    elif hasattr(container, "append") and callable(container.append):
         adder = container.append
     else:
-        raise TypeError('unknown container')
+        raise TypeError("unknown container")
 
     for item in iterable:
         k = key(item) if key is not None else item
@@ -199,29 +206,31 @@ def grouped(iterable, factory=dict, container=list, *, key=None, value=None):
     return groups
 
 
-def partitioned(iterable, factory=DEFAULT_ORDERED_DICT, container=list, *, key=None, value=None):
+def partitioned(
+    iterable, factory=DEFAULT_ORDERED_DICT, container=list, *, key=None, value=None
+):
     groups = grouped(iterable, factory, container, key=key, value=value)
     return list(groups.values())
 
 
 def grouped_items(iterable, factory=dict, container=list):
     if not isinstance(iterable, Iterable):
-        raise TypeError('target is not iterable')
+        raise TypeError("target is not iterable")
 
     if not callable(factory):
-        raise TypeError('factory is not callable')
+        raise TypeError("factory is not callable")
 
     if not callable(container):
-        raise TypeError('container is not callable')
+        raise TypeError("container is not callable")
 
     groups = factory()
 
-    if hasattr(container, 'add') and callable(container.add):
+    if hasattr(container, "add") and callable(container.add):
         adder = container.add
-    elif hasattr(container, 'append') and callable(container.append):
+    elif hasattr(container, "append") and callable(container.append):
         adder = container.append
     else:
-        raise TypeError('unknown container')
+        raise TypeError("unknown container")
 
     for k, v in iterable:
         c = groups.get(k)

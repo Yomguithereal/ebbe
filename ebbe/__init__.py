@@ -14,12 +14,9 @@ from ebbe.iter import (
     with_next,
     with_is_first,
     with_is_last,
-    without_first
+    without_first,
 )
-from ebbe.format import (
-    prettyprint_int,
-    prettyprint_seconds
-)
+from ebbe.format import prettyprint_int, prettyprint_seconds
 from ebbe.utils import (
     noop,
     get,
@@ -31,5 +28,5 @@ from ebbe.utils import (
     grouped,
     partitioned,
     grouped_items,
-    partitioned_items
+    partitioned_items,
 )

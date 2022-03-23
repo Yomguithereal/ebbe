@@ -10,7 +10,6 @@ from ebbe.iter import fail_fast as fail
 
 def fail_fast():
     def wrapper(fn):
-
         @wraps(fn)
         def wrapped(*args, **kwargs):
             return fail(fn(*args, **kwargs))
@@ -22,12 +21,11 @@ def fail_fast():
 
 def with_defer():
     def wrapper(fn):
-
         @wraps(fn)
         def wrapped(*args, **kwargs):
             with ExitStack() as stack:
                 defer = stack.callback
-                kwargs['defer'] = defer
+                kwargs["defer"] = defer
                 fn(*args, **kwargs)
 
         return wrapped
@@ -35,7 +33,4 @@ def with_defer():
     return wrapper
 
 
-__all__ = [
-    'fail_fast',
-    'with_defer'
-]
+__all__ = ["fail_fast", "with_defer"]

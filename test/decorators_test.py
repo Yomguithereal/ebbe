@@ -7,7 +7,6 @@ from ebbe.decorators import fail_fast, with_defer
 
 class TestDecorators(object):
     def test_fail_fast(self):
-
         @fail_fast()
         def hellraiser():
             raise RuntimeError
