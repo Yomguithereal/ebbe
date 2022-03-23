@@ -4,12 +4,18 @@
 #
 import sys
 from timeit import default_timer as timer
+from typing import TextIO
 
 from ebbe.format import prettyprint_time
 
 
 class Timer(object):
-    def __init__(self, name="Timer", file=sys.stderr, precision="nanoseconds"):
+    def __init__(
+        self,
+        name: str = "Timer",
+        file: TextIO = sys.stderr,
+        precision: str = "nanoseconds",
+    ):
         self.name = name
         self.file = file
         self.precision = precision
