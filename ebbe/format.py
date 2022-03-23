@@ -50,6 +50,12 @@ INTERVAL_CONVERSION = {t[0]: t[1] for t in INTERVALS}
 
 
 def format_time_item(value, unit):
+    if value == 0:
+        return "0 %s" % unit
+
+    if value < 1:
+        return ("%.3f" % value).rstrip(".0") + " " + unit
+
     if value == 1:
         unit = unit.rstrip("s")
 
@@ -59,6 +65,9 @@ def format_time_item(value, unit):
 def prettyprint_time(time, precision="nanoseconds", unit="nanoseconds"):
     unit = unit.rstrip("s") + "s"
     precision = precision.rstrip("s") + "s"
+
+    if time == 0:
+        return format_time_item(0, unit)
 
     if unit != "nanoseconds":
         conversion = INTERVAL_CONVERSION.get(unit)
@@ -72,10 +81,15 @@ def prettyprint_time(time, precision="nanoseconds", unit="nanoseconds"):
         raise TypeError('invalid precision "%s"' % precision)
 
     result = []
+    remain = 0
 
     for name, count in INTERVALS:
         value = time // count
         time -= value * count
+
+        if name == precision:
+            remain = time / count
+
         result.append((value, name))
 
     precised = []
@@ -88,13 +102,10 @@ def prettyprint_time(time, precision="nanoseconds", unit="nanoseconds"):
             break
 
     if not precised:
-        return ("%.3f" % time).rstrip(".0") + " " + unit
+        return ("%.3f" % remain).rstrip(".0") + " " + unit
 
     return and_join(format_time_item(t[0], t[1]) for t in precised)
 
 
 prettyprint_seconds = partial(prettyprint_time, unit="seconds", precision="seconds")
-
-# TODO: unit should not clamp precision
 # TODO: short notation
-# TODO: format 0
