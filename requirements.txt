@@ -1,6 +1,4 @@
 # Dev Dependencies
-black
 pytest==3.5.1
-tqdm==4.31.1
 twine==1.11.0
 wheel
