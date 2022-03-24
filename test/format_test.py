@@ -58,3 +58,8 @@ class TestDecorators(object):
             == "745 microseconds"
         )
         assert prettyprint_time(0) == "0 nanoseconds"
+        assert prettyprint_time(4865268458795, max_items=2) == "1 hour and 21 minutes"
+        assert (
+            prettyprint_time(4865268458795, short=True)
+            == "1h, 21m, 5s, 268ms, 458µs, 795ns"
+        )

@@ -49,7 +49,8 @@ pip install ebbe
 
 * `Timer`
 * `prettyprint_int`
-* `prettyprint_seconds`
+* `prettyprint_time`,
+* `and_join`
 
 ### as_chunks
 

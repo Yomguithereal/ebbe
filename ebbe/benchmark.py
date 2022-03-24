@@ -28,6 +28,12 @@ class Timer(object):
         self.duration = self.end - self.start
         print(
             "%s:" % self.name,
-            prettyprint_time(self.duration, precision=self.precision, unit="seconds"),
+            prettyprint_time(
+                self.duration,
+                precision=self.precision,
+                unit="seconds",
+                max_items=2,
+                short=True,
+            ),
             file=self.file,
         )

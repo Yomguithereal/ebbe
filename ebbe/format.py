@@ -2,7 +2,7 @@
 # Ebbe Formatting Helpers
 # =============================================================================
 #
-from typing import Iterable
+from typing import Iterable, Optional, Tuple
 from functools import partial
 
 
@@ -39,6 +39,18 @@ INTERVALS = [
     ("nanoseconds", 1),
 ]
 
+SHORT_NAMES = {
+    "years": "y",
+    "weeks": "w",
+    "days": "d",
+    "hours": "h",
+    "minutes": "m",
+    "seconds": "s",
+    "milliseconds": "ms",
+    "microseconds": "µs",
+    "nanoseconds": "ns",
+}
+
 cumprod = 1
 
 for i in range(len(INTERVALS) - 1, -1, -1):
@@ -50,27 +62,41 @@ for i in range(len(INTERVALS) - 1, -1, -1):
 INTERVAL_CONVERSION = {t[0]: t[1] for t in INTERVALS}
 
 
-def format_time_item(value: float, unit: str) -> str:
+def format_time_item(value: float, unit: str, short: bool = False) -> str:
+    if short:
+        unit = SHORT_NAMES[unit]
+
     if value == 0:
         return "0 %s" % unit
 
     if value < 1:
         return ("%.3f" % value).rstrip(".0") + " " + unit
 
-    if value == 1:
+    if not short and value == 1:
         unit = unit.rstrip("s")
 
-    return "%i %s" % (value, unit)
+    return "%i%s%s" % (value, "" if short else " ", unit)
+
+
+def format_time_items(items: Iterable[Tuple[float, str]], short: bool = False):
+    if short:
+        return ", ".join(format_time_item(t[0], t[1], short=True) for t in items)
+    else:
+        return and_join(format_time_item(t[0], t[1]) for t in items)
 
 
 def prettyprint_time(
-    time: float, precision: str = "nanoseconds", unit: str = "nanoseconds"
+    time: float,
+    precision: str = "nanoseconds",
+    unit: str = "nanoseconds",
+    max_items: Optional[int] = None,
+    short: bool = False,
 ) -> str:
     unit = unit.rstrip("s") + "s"
     precision = precision.rstrip("s") + "s"
 
     if time == 0:
-        return format_time_item(0, unit)
+        return format_time_item(0, unit, short=short)
 
     if unit != "nanoseconds":
         conversion = INTERVAL_CONVERSION.get(unit)
@@ -107,8 +133,10 @@ def prettyprint_time(
     if not precised:
         return ("%.3f" % remain).rstrip(".0") + " " + unit
 
-    return and_join(format_time_item(t[0], t[1]) for t in precised)
+    if max_items is not None:
+        precised = precised[:max_items]
+
+    return format_time_items(precised, short=short)
 
 
 prettyprint_seconds = partial(prettyprint_time, unit="seconds", precision="seconds")
-# TODO: short notation
