@@ -6,7 +6,7 @@ import sys
 from timeit import default_timer as timer
 from typing import TextIO
 
-from ebbe.format import prettyprint_time
+from ebbe.format import format_time
 
 
 class Timer(object):
@@ -28,7 +28,7 @@ class Timer(object):
         self.duration = self.end - self.start
         print(
             "%s:" % self.name,
-            prettyprint_time(
+            format_time(
                 self.duration,
                 precision=self.precision,
                 unit="seconds",

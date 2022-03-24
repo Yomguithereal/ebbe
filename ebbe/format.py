@@ -6,7 +6,7 @@ from typing import Iterable, Optional, Tuple
 from functools import partial
 
 
-def prettyprint_int(n: float, separator: str = ",") -> str:
+def format_int(n: float, separator: str = ",") -> str:
     s = "{:,}".format(int(n))
 
     if separator != ",":
@@ -85,7 +85,7 @@ def format_time_items(items: Iterable[Tuple[float, str]], short: bool = False):
         return and_join(format_time_item(t[0], t[1]) for t in items)
 
 
-def prettyprint_time(
+def format_time(
     time: float,
     precision: str = "nanoseconds",
     unit: str = "nanoseconds",
@@ -139,4 +139,4 @@ def prettyprint_time(
     return format_time_items(precised, short=short)
 
 
-prettyprint_seconds = partial(prettyprint_time, unit="seconds", precision="seconds")
+format_seconds = partial(format_time, unit="seconds", precision="seconds")

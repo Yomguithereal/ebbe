@@ -40,17 +40,20 @@ pip install ebbe
 * [partitioned](#partitioned)
 * [sorted_uniq](#sorted_uniq)
 
+*Formatting*
+
+* [and_join](#and_join)
+* [format_int](#format_int)
+* [format_time](#format_time)
+
 *Decorators*
 
 * [decorators.fail_fast](#decoratorsfail_fast)
 * [decorators.with_defer](#decoratorswith_defer)
 
-*Undocumented*
+*Benchmarking*
 
-* `Timer`
-* `prettyprint_int`
-* `prettyprint_time`,
-* `and_join`
+* [Timer](#timer)
 
 ### as_chunks
 
@@ -462,6 +465,60 @@ sorted_uniq(numbers, reverse=True)
 >>> [17, 5, 4, 3, 1, -1]
 ```
 
+### and_join
+
+Join function able to group the last items with a custom copula such as "and".
+
+```python
+from ebbe import and_join
+
+and_join(['1', '2', '3'])
+>>> '1, 2 and 3'
+
+and_join(['1', '2', '3'], separator=';', copula="y")
+>>> '1; 2 y 3'
+```
+
+### format_int
+
+Format given number as an int with thousands separator.
+
+```python
+from ebbe import format_int
+
+format_int(4500)
+>>> '4,500'
+
+format_int(10000, separator=' ')
+>>> '10 000'
+```
+
+### format_time
+
+Format time with custom precision and unit from years to nanoseconds.
+
+```python
+from ebbe import format_time
+
+format_time(57309)
+>>> "57 microseconds and 309 nanoseconds"
+
+format_time(57309, precision="microseconds")
+>>> "57 microseconds
+
+format_time(78, unit="seconds")
+>>> "1 minute and 18 seconds"
+
+format_time(4865268458795)
+>>> "1 hour, 21 minutes, 5 seconds, 268 milliseconds, 458 microseconds and 795 nanoseconds"
+
+assert format_time(4865268458795, max_items=2)
+>>> "1 hour and 21 minutes"
+
+format_time(4865268458795, short=True)
+>>> "1h, 21m, 5s, 268ms, 458µs, 795ns"
+```
+
 ### decorators.fail_fast
 
 Decorate a generator function by wrapping it into another generator function that will fail fast if some validation is run before executing the iteration logic so that exceptions can be caught early.
@@ -506,4 +563,26 @@ def main(content, *, defer):
   defer(f.close)
 
   f.write(content)
+```
+
+### Timer
+
+Context manager printing the time (to stderr by default) it took to execute wrapped code. Very useful to run benchmarks.
+
+```python
+from ebbe import Timer
+
+with Timer():
+  some_costly_operation()
+# Will print "Timer: ...s etc." on exit
+
+# To display a custom message:
+with Timer('my operation'):
+  ...
+
+# To print to stdout
+import sys
+
+with Timer(file=sys.stdout):
+  ...
 ```

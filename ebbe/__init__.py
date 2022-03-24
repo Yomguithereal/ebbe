@@ -16,7 +16,7 @@ from ebbe.iter import (
     with_is_last,
     without_first,
 )
-from ebbe.format import prettyprint_int, prettyprint_time, prettyprint_seconds, and_join
+from ebbe.format import format_int, format_time, format_seconds, and_join
 from ebbe.utils import (
     noop,
     get,
