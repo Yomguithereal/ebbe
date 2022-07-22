@@ -5,7 +5,7 @@ with open("./README.md", "r") as f:
 
 setup(
     name="ebbe",
-    version="1.8.0",
+    version="1.9.0",
     description="A collection of iterator-related functions for python.",
     long_description=long_description,
     long_description_content_type="text/markdown",
