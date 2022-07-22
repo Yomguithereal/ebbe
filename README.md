@@ -39,6 +39,8 @@ pip install ebbe
 * [grouped](#grouped)
 * [partitioned](#partitioned)
 * [sorted_uniq](#sorted_uniq)
+* [pick](#pick)
+* [omit](#omit)
 
 *Formatting*
 
@@ -463,6 +465,38 @@ sorted_uniq(numbers)
 # It accepts all of `sorted` kwargs:
 sorted_uniq(numbers, reverse=True)
 >>> [17, 5, 4, 3, 1, -1]
+```
+
+### pick
+
+Function returning the given dictionary with only the selected keys.
+
+```python
+from ebbe import pick
+
+# Selected keys must be an iterable:
+pick({'a': 1, 'b': 2, 'c': 3}, ['a', 'c'])
+>>> {'a': 1, 'c': 3}
+
+# If you need the function to raise of one of the picked keys is not found:
+pick({'a': 1, 'b': 2, 'c': 3}, ['a', 'd'])
+>>> TypeError
+```
+
+### omit
+
+Function returning the given dictionary without the selected keys.
+
+```python
+from ebbe import omit
+
+# Selected keys must be a container:
+omit({'a': 1, 'b': 2, 'c': 3}, ['a', 'c'])
+>>> {'b': 2}
+
+# If need to select large numbers of keys, use a set:
+omit({'a': 1, 'b': 2, 'c': 3}, {'a', 'c'})
+>>> {'b': 2}
 ```
 
 ### and_join

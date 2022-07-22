@@ -8,6 +8,7 @@ from collections.abc import Iterable
 
 AT_LEAST_PY37 = version_info >= (3, 7)
 DEFAULT_ORDERED_DICT = dict if AT_LEAST_PY37 else OrderedDict
+NOT_FOUND = object()
 
 
 def noop(*args, **kwargs):
@@ -247,3 +248,30 @@ def grouped_items(iterable, factory=dict, container=list):
 def partitioned_items(iterable, factory=DEFAULT_ORDERED_DICT, container=list):
     groups = grouped_items(iterable, factory, container)
     return list(groups.values())
+
+
+def pick(d, keys, *, strict=False):
+    n = {}
+
+    for k in keys:
+        v = d.get(k, NOT_FOUND)
+
+        if v is NOT_FOUND:
+            if strict:
+                raise KeyError(k)
+            else:
+                continue
+
+        n[k] = v
+
+    return n
+
+
+def omit(d, keys):
+    n = {}
+
+    for k, v in d.items():
+        if k not in keys:
+            n[k] = v
+
+    return n

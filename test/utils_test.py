@@ -16,6 +16,8 @@ from ebbe import (
     partitioned,
     grouped_items,
     partitioned_items,
+    pick,
+    omit,
 )
 
 
@@ -224,3 +226,19 @@ class TestUtils(object):
             {0, 1, 4},
             {2, 3},
         ]
+
+    def test_pick(self):
+        d = {"a": 1, "b": 2, "c": 3}
+
+        assert pick(d, ["a", "c"]) == {"a": 1, "c": 3}
+
+        with pytest.raises(KeyError):
+            pick(d, ["d"], strict=True)
+
+        assert pick(d, ["b", "d"]) == {"b": 2}
+
+    def test_omit(self):
+        d = {"a": 1, "b": 2, "c": 3}
+
+        assert omit(d, ["a", "c"]) == {"b": 2}
+        assert omit(d, ["a", "c", "d"]) == {"b": 2}
