@@ -478,9 +478,9 @@ from ebbe import pick
 pick({'a': 1, 'b': 2, 'c': 3}, ['a', 'c'])
 >>> {'a': 1, 'c': 3}
 
-# If you need the function to raise of one of the picked keys is not found:
-pick({'a': 1, 'b': 2, 'c': 3}, ['a', 'd'])
->>> TypeError
+# If you need the function to raise if one of the picked keys is not found:
+pick({'a': 1, 'b': 2, 'c': 3}, ['a', 'd'], strict=True)
+>>> KeyError: 'd'
 ```
 
 ### omit
