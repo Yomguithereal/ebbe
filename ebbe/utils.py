@@ -11,10 +11,6 @@ DEFAULT_ORDERED_DICT = dict if AT_LEAST_PY37 else OrderedDict
 NOT_FOUND = object()
 
 
-def noop(*args, **kwargs):
-    pass
-
-
 def get(target, key, default=None):
     try:
         return target[key]

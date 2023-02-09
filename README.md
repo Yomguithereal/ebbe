@@ -34,13 +34,18 @@ pip install ebbe
 * [getter](#getter)
 * [getpath](#getpath)
 * [pathgetter](#pathgetter)
-* [noop](#noop)
 * [indexed](#indexed)
 * [grouped](#grouped)
 * [partitioned](#partitioned)
 * [sorted_uniq](#sorted_uniq)
 * [pick](#pick)
 * [omit](#omit)
+
+*Functional Programming*
+
+* [noop](#noop)
+* [compose](#compose)
+* [rcompose](#rcompose)
 
 *Formatting*
 
@@ -364,18 +369,6 @@ getter(data)
 * **target** *any*: target object.
 * **default** *?any* [`None`]: default value to return.
 
-### noop
-
-Noop function (a function that can be called with any arguments and does nothing). Useful as a default to avoid complicating code sometimes.
-
-```python
-from ebbe import noop
-
-noop() # Does nothing...
-noop(4, 5) # Still does nothing...
-noop(4, index=65) # Nothing yet again...
-```
-
 ### indexed
 
 Function indexing the given iterable in a dict-like structure. This is basically just some functional sugar over a `dict` constructor.
@@ -497,6 +490,52 @@ omit({'a': 1, 'b': 2, 'c': 3}, ['a', 'c'])
 # If need to select large numbers of keys, use a set:
 omit({'a': 1, 'b': 2, 'c': 3}, {'a', 'c'})
 >>> {'b': 2}
+```
+
+### noop
+
+Noop function (a function that can be called with any arguments and does nothing). Useful as a default to avoid complicating code sometimes.
+
+```python
+from ebbe import noop
+
+noop() # Does nothing...
+noop(4, 5) # Still does nothing...
+noop(4, index=65) # Nothing yet again...
+```
+
+### compose
+
+Function returning the composition function of its variadic arguments.
+
+```python
+def times_2(x):
+  return x * 2
+
+def plus_5(x):
+  return x + 5
+
+compose(times_2, plus_5)(10)
+>>> 30
+
+# Reverse order
+compose(times_2, plus_5, reverse=True)(10)
+>>> 25
+```
+
+### rcompose
+
+Function returning the reverse composition function of its variadic arguments.
+
+```python
+def times_2(x):
+  return x * 2
+
+def plus_5(x):
+  return x + 5
+
+rcompose(times_2, plus_5)(10)
+>>> 25
 ```
 
 ### and_join
