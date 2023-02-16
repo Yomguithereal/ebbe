@@ -182,3 +182,11 @@ def without_first(iterable):
             continue
 
         yield item
+
+
+def without_last(iterable):
+    for is_last, item in with_is_last(iterable):
+        if is_last:
+            break
+
+        yield item

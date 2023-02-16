@@ -16,6 +16,7 @@ from ebbe import (
     with_is_first,
     with_is_last,
     without_first,
+    without_last,
 )
 
 STRING = "Bonjour"
@@ -226,3 +227,14 @@ class TestIter(object):
         assert list(without_first([1])) == []
 
         assert list(without_first([])) == []
+
+    def test_without_last(self):
+        a = [1, 2, 3]
+
+        result = list(without_last(a))
+
+        assert result == [1, 2]
+
+        assert list(without_last([1])) == []
+
+        assert list(without_last([])) == []

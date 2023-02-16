@@ -27,6 +27,7 @@ pip install ebbe
 * [with_is_first](#with_is_first)
 * [with_is_last](#with_is_last)
 * [without_first](#without_first)
+* [without_last](#without_last)
 
 *Utilities*
 
@@ -245,6 +246,17 @@ list(without_first([1, 2, 3]))
 
 for row in without_first(csv.reader(f)):
   print(row)
+```
+
+### without_last
+
+Iterate over the given iterator but skipping its last item.
+
+```python
+from ebbe import without_last
+
+list(without_last([1, 2, 3]))
+>>> [1, 2]
 ```
 
 ### get

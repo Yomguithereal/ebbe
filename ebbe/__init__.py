@@ -15,6 +15,7 @@ from ebbe.iter import (
     with_is_first,
     with_is_last,
     without_first,
+    without_last,
 )
 from ebbe.func import compose, rcompose, count_arity, noop
 from ebbe.format import format_int, format_time, format_seconds, and_join
