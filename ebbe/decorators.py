@@ -26,7 +26,7 @@ def with_defer():
             with ExitStack() as stack:
                 defer = stack.callback
                 kwargs["defer"] = defer
-                fn(*args, **kwargs)
+                return fn(*args, **kwargs)
 
         return wrapped
 

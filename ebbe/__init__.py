@@ -3,6 +3,8 @@
 # =============================================================================
 #
 from ebbe.benchmark import Timer
+from ebbe.format import format_int, format_time, format_seconds, and_join
+from ebbe.func import compose, rcompose, count_arity, noop
 from ebbe.iter import (
     as_chunks,
     as_grams,
@@ -17,8 +19,6 @@ from ebbe.iter import (
     without_first,
     without_last,
 )
-from ebbe.func import compose, rcompose, count_arity, noop
-from ebbe.format import format_int, format_time, format_seconds, and_join
 from ebbe.utils import (
     get,
     getter,
