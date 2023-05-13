@@ -5,8 +5,8 @@ with open("./README.md", "r") as f:
 
 setup(
     name="ebbe",
-    version="1.11.1",
-    description="A collection of iterator-related functions for python.",
+    version="1.12.0",
+    description="Collection of typical helper functions for python.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="http://github.com/Yomguithereal/ebbe",
