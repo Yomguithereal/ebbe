@@ -2,7 +2,7 @@
 # Ebbe Formatting Helpers
 # =============================================================================
 #
-from typing import Iterable, Optional, Tuple
+from typing import Iterable, Iterator, Optional, Tuple, Container, Any
 from functools import partial
 
 
@@ -140,3 +140,69 @@ def format_time(
 
 
 format_seconds = partial(format_time, unit="seconds", precision="seconds")
+
+
+def obj_attr_iter(
+    obj: Any, attributes: Optional[Iterable[str]] = None
+) -> Iterator[Tuple[str, Any]]:
+
+    # Given attributes
+    if attributes is not None:
+        for k in attributes:
+            yield k, getattr(obj, k)
+
+        return
+
+    slots = getattr(obj, "__slots__", None)
+
+    # Slots
+    if slots is not None:
+        for k in slots:
+            yield k, getattr(obj, k)
+
+        return
+
+    # All attributes
+    for k in sorted(dir(obj)):
+        if k.startswith("_"):
+            continue
+
+        yield k, getattr(obj, k)
+
+
+def format_repr(
+    obj: Any,
+    attributes: Optional[Iterable[str]] = None,
+    conditionals: Optional[Container[str]] = None,
+    max_length: Optional[int] = None,
+    style: Optional[str] = "<>",
+) -> str:
+    if style != "<>" and style != "()":
+        raise TypeError('style should be "<>" or "()"')
+
+    class_name = obj.__class__.__name__
+
+    parts = []
+
+    for k, v in obj_attr_iter(obj, attributes):
+        if conditionals is not None and k in conditionals and v is None:
+            continue
+
+        if max_length is not None and isinstance(v, str):
+            v = v[: max(0, max_length - 1)] + "…"
+
+        parts.append("{}={!r}".format(k, v))
+
+    r = ""
+
+    if style == "<>":
+        r = "<" + class_name + " "
+        r += " ".join(parts)
+        r += ">"
+
+    else:
+        r = class_name + "("
+        r += ", ".join(parts)
+        r += ")"
+
+    return r

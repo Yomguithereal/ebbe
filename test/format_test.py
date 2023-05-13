@@ -1,7 +1,7 @@
 # =============================================================================
 # Ebbe Formatting Unit Tests
 # =============================================================================
-from ebbe.format import format_int, and_join, format_time, format_seconds
+from ebbe.format import format_int, and_join, format_time, format_seconds, format_repr
 
 
 class TestDecorators(object):
@@ -58,4 +58,52 @@ class TestDecorators(object):
         assert format_time(4865268458795, max_items=2) == "1 hour and 21 minutes"
         assert (
             format_time(4865268458795, short=True) == "1h, 21m, 5s, 268ms, 458µs, 795ns"
+        )
+
+    def test_format_repr(self):
+        class Video:
+            name: str
+            duration: int
+
+            def __init__(self, name: str, duration: int):
+                self.name = name
+                self.duration = duration
+
+        assert format_repr(Video("test", 45)) == "<Video duration=45 name='test'>"
+        assert (
+            format_repr(Video("test", 45), max_length=3)
+            == "<Video duration=45 name='te…'>"
+        )
+        assert (
+            format_repr(Video("test", 45), style="()")
+            == "Video(duration=45, name='test')"
+        )
+        assert (
+            format_repr(Video("test", 45), style="()", attributes=("duration",))
+            == "Video(duration=45)"
+        )
+
+        class SlottedVideo:
+            __slots__ = ("name", "age")
+
+            def __init__(self, name: str, age: int):
+                self.name = name
+                self.age = age
+
+        assert (
+            format_repr(SlottedVideo("test", 34)) == "<SlottedVideo name='test' age=34>"
+        )
+
+        class OptionalVideo:
+            def __init__(self, name, age=None):
+                self.name = name
+                self.age = age
+
+        assert (
+            format_repr(OptionalVideo("test")) == "<OptionalVideo age=None name='test'>"
+        )
+
+        assert (
+            format_repr(OptionalVideo("test"), conditionals=("age",))
+            == "<OptionalVideo name='test'>"
         )
