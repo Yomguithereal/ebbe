@@ -107,3 +107,12 @@ class TestDecorators(object):
             format_repr(OptionalVideo("test"), conditionals=("age",))
             == "<OptionalVideo name='test'>"
         )
+
+        assert (
+            format_repr(
+                OptionalVideo("test"),
+                attributes=["name", ("dtype", None), ("custom", True)],
+                conditionals=("dtype",),
+            )
+            == "<OptionalVideo name='test' custom=True>"
+        )

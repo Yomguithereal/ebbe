@@ -2,7 +2,7 @@
 # Ebbe Formatting Helpers
 # =============================================================================
 #
-from typing import Iterable, Iterator, Optional, Tuple, Container, Any
+from typing import Iterable, Iterator, Optional, Union, Tuple, Container, Any
 from functools import partial
 
 
@@ -141,15 +141,20 @@ def format_time(
 
 format_seconds = partial(format_time, unit="seconds", precision="seconds")
 
+AttributesSpec = Iterable[Union[str, Tuple[str, Any]]]
+
 
 def obj_attr_iter(
-    obj: Any, attributes: Optional[Iterable[str]] = None
+    obj: Any, attributes: Optional[AttributesSpec] = None
 ) -> Iterator[Tuple[str, Any]]:
 
     # Given attributes
     if attributes is not None:
         for k in attributes:
-            yield k, getattr(obj, k)
+            if isinstance(k, tuple):
+                yield k[0], k[1]
+            else:
+                yield k, getattr(obj, k)
 
         return
 
@@ -172,7 +177,7 @@ def obj_attr_iter(
 
 def format_repr(
     obj: Any,
-    attributes: Optional[Iterable[str]] = None,
+    attributes: Optional[AttributesSpec] = None,
     conditionals: Optional[Container[str]] = None,
     max_length: Optional[int] = None,
     style: Optional[str] = "<>",
