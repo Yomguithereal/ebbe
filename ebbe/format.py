@@ -163,6 +163,9 @@ def obj_attr_iter(
     # Slots
     if slots is not None:
         for k in slots:
+            if k.startswith("_"):
+                continue
+
             yield k, getattr(obj, k)
 
         return

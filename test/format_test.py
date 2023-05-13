@@ -84,14 +84,24 @@ class TestDecorators(object):
         )
 
         class SlottedVideo:
-            __slots__ = ("name", "age")
+            __slots__ = ("name", "age", "__cache")
 
             def __init__(self, name: str, age: int):
                 self.name = name
                 self.age = age
+                self.__cache = True
+
+            @property
+            def cache(self):
+                return self.__cache
 
         assert (
             format_repr(SlottedVideo("test", 34)) == "<SlottedVideo name='test' age=34>"
+        )
+
+        assert (
+            format_repr(SlottedVideo("test", 45), attributes=("cache", "name"))
+            == "<SlottedVideo cache=True name='test'>"
         )
 
         class OptionalVideo:
