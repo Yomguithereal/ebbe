@@ -3,7 +3,14 @@
 # =============================================================================
 #
 from ebbe.benchmark import Timer
-from ebbe.format import format_int, format_time, format_seconds, and_join, format_repr
+from ebbe.format import (
+    format_int,
+    format_time,
+    format_seconds,
+    and_join,
+    format_repr,
+    format_filesize,
+)
 from ebbe.func import compose, rcompose, count_arity, noop
 from ebbe.iter import (
     as_chunks,

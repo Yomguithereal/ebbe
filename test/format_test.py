@@ -1,7 +1,14 @@
 # =============================================================================
 # Ebbe Formatting Unit Tests
 # =============================================================================
-from ebbe.format import format_int, and_join, format_time, format_seconds, format_repr
+from ebbe.format import (
+    format_int,
+    and_join,
+    format_time,
+    format_seconds,
+    format_repr,
+    format_filesize,
+)
 
 
 class TestDecorators(object):
@@ -126,3 +133,14 @@ class TestDecorators(object):
             )
             == "<OptionalVideo name='test' custom=True>"
         )
+
+    def test_format_filesize(self):
+        assert format_filesize(0) == "0"
+        assert format_filesize(1) == "1"
+        assert format_filesize(10) == "10"
+        assert format_filesize(2500) == "2.5KB"
+        assert format_filesize(257207) == "257.2KB"
+        assert format_filesize(257207, separator=" ") == "257.2 KB"
+        assert format_filesize(257207, short=True) == "257.2K"
+        assert format_filesize(257207, binary=True) == "251.2KiB"
+        assert format_filesize(257207, binary=True, short=True) == "251.2K"

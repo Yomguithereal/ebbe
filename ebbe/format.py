@@ -2,7 +2,7 @@
 # Ebbe Formatting Helpers
 # =============================================================================
 #
-from typing import Iterable, Iterator, Optional, Union, Tuple, Container, Any
+from typing import Iterable, Iterator, Optional, Union, Tuple, List, Container, Any
 from functools import partial
 
 
@@ -214,3 +214,57 @@ def format_repr(
         r += ")"
 
     return r
+
+
+FILESIZE_SUFFIXES = ["KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
+SHORT_FILESIZE_SUFFIXES = ["K", "M", "G", "T", "P", "E", "Z", "Y"]
+FILESIZE_BINARY_SUFFIXES = [
+    "KiB",
+    "MiB",
+    "GiB",
+    "TiB",
+    "PiB",
+    "EiB",
+    "ZiB",
+    "YiB",
+]
+
+
+def format_filesize(
+    size: int,
+    *,
+    binary: bool = False,
+    precision: Optional[int] = 1,
+    separator: Optional[str] = "",
+    short: bool = False
+) -> str:
+    if size < 0:
+        raise TypeError("expecting a number >= 0")
+
+    suffixes = FILESIZE_BINARY_SUFFIXES if binary else FILESIZE_SUFFIXES
+
+    if short:
+        suffixes = SHORT_FILESIZE_SUFFIXES
+
+    base = 1024 if binary else 1000
+
+    if size < base:
+        return "{:,}".format(size)
+
+    suffix = None
+    unit = None
+
+    for i, suffix in enumerate(suffixes, 2):
+        unit = base**i
+
+        if size < unit:
+            break
+
+    assert suffix is not None and unit is not None
+
+    return "{:,.{precision}f}{separator}{}".format(
+        (base * size / unit),
+        suffix,
+        precision=precision,
+        separator=separator,
+    )

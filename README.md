@@ -54,6 +54,8 @@ pip install ebbe
 * [format_int](#format_int)
 * [format_time](#format_time)
 
+TODO: *format_repr*, *format_filesize*
+
 *Decorators*
 
 * [decorators.fail_fast](#decoratorsfail_fast)
