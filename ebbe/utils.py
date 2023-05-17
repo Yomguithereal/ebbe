@@ -2,7 +2,7 @@
 # Ebbe Miscellaneous Helper Functions
 # =============================================================================
 #
-from typing import Optional, Dict, Container, Iterable, overload
+from typing import Optional, Dict, Container, Iterable, TypeVar, Union, overload
 from ebbe.types import Indexable, K, V
 
 from sys import version_info
@@ -13,17 +13,22 @@ DEFAULT_ORDERED_DICT = dict if AT_LEAST_PY37 else OrderedDict
 NOT_FOUND = object()
 
 
+D = TypeVar("D")
+
+
 @overload
 def get(target: Indexable[K, V], key: K, default: None = ...) -> Optional[V]:
     ...
 
 
 @overload
-def get(target: Indexable[K, V], key: K, default: V = ...) -> V:
+def get(target: Indexable[K, V], key: K, default: D = ...) -> Union[V, D]:
     ...
 
 
-def get(target: Indexable[K, V], key: K, default: Optional[V] = None) -> Optional[V]:
+def get(
+    target: Indexable[K, V], key: K, default: Optional[D] = None
+) -> Optional[Union[V, D]]:
     try:
         return target[key]
     except (KeyError, IndexError):
