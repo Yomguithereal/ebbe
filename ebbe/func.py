@@ -3,7 +3,6 @@
 # =============================================================================
 #
 from inspect import signature, Parameter
-from functools import partial
 
 
 def noop(*args, **kwargs):
