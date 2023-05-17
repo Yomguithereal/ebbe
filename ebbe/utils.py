@@ -2,12 +2,11 @@
 # Ebbe Miscellaneous Helper Functions
 # =============================================================================
 #
-from typing import Optional, overload
+from typing import Optional, Dict, Container, Iterable, overload
 from ebbe.types import Indexable, K, V
 
 from sys import version_info
 from collections import OrderedDict
-from collections.abc import Iterable
 
 AT_LEAST_PY37 = version_info >= (3, 7)
 DEFAULT_ORDERED_DICT = dict if AT_LEAST_PY37 else OrderedDict
@@ -257,7 +256,7 @@ def partitioned_items(iterable, factory=DEFAULT_ORDERED_DICT, container=list):
     return list(groups.values())
 
 
-def pick(d, keys, *, strict=False):
+def pick(d: Dict[K, V], keys: Iterable[K], *, strict: bool = False) -> Dict[K, V]:
     n = {}
 
     for k in keys:
@@ -274,7 +273,7 @@ def pick(d, keys, *, strict=False):
     return n
 
 
-def omit(d, keys):
+def omit(d: Dict[K, V], keys: Container[K]) -> Dict[K, V]:
     n = {}
 
     for k, v in d.items():
