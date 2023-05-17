@@ -2,15 +2,19 @@
 # Ebbe Iterating Functions
 # =============================================================================
 #
+from typing import Iterator, Iterable, List, Tuple, TypeVar, Optional
+
 from collections import deque
 from collections.abc import Sequence
 
+T = TypeVar("T")
 
-def empty_generator():
+
+def empty_generator() -> Iterator:
     yield from ()
 
 
-def as_chunks(size, iterable):
+def as_chunks(size: int, iterable: Iterable[T]) -> Iterator[List[T]]:
     chunk = []
 
     for item in iterable:
@@ -60,7 +64,7 @@ def as_grams(size, iterable):
         yield tuple(i for i in buffer)
 
 
-def fail_fast(iterable):
+def fail_fast(iterable: Iterable[T]) -> Iterator[T]:
     iterator = iter(iterable)
 
     try:
@@ -111,7 +115,7 @@ def distinct(iterable, *, key=None):
         yield item
 
 
-def with_prev(iterable):
+def with_prev(iterable: Iterable[T]) -> Iterator[Tuple[Optional[T], T]]:
     prev = None
 
     for item in iterable:
@@ -120,7 +124,7 @@ def with_prev(iterable):
         prev = item
 
 
-def with_next(iterable):
+def with_next(iterable: Iterable[T]) -> Iterator[Tuple[T, Optional[T]]]:
     iterator = iter(iterable)
 
     try:
@@ -135,7 +139,9 @@ def with_next(iterable):
     yield last, None
 
 
-def with_prev_and_next(iterable):
+def with_prev_and_next(
+    iterable: Iterable[T],
+) -> Iterator[Tuple[Optional[T], T, Optional[T]]]:
     prev = None
     iterator = iter(iterable)
 
@@ -152,7 +158,7 @@ def with_prev_and_next(iterable):
     yield prev, last, None
 
 
-def with_is_first(iterable):
+def with_is_first(iterable: Iterable[T]) -> Iterator[Tuple[bool, T]]:
     is_first = True
 
     for item in iterable:
@@ -160,7 +166,7 @@ def with_is_first(iterable):
         is_first = False
 
 
-def with_is_last(iterable):
+def with_is_last(iterable: Iterable[T]) -> Iterator[Tuple[bool, T]]:
     iterator = iter(iterable)
 
     try:
@@ -175,7 +181,7 @@ def with_is_last(iterable):
     yield True, last
 
 
-def without_first(iterable):
+def without_first(iterable: Iterable[T]) -> Iterator[T]:
     for is_first, item in with_is_first(iterable):
         if is_first:
             continue
@@ -183,7 +189,7 @@ def without_first(iterable):
         yield item
 
 
-def without_last(iterable):
+def without_last(iterable: Iterable[T]) -> Iterator[T]:
     for is_last, item in with_is_last(iterable):
         if is_last:
             break
