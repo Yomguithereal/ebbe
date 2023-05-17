@@ -61,15 +61,18 @@ def parse_path(string, *, split_char=".", parse_indices=False):
     return path
 
 
+KeyOrIndex = Union[str, int]
+
+
 def getpath(
     target,
-    path,
+    path: Union[KeyOrIndex, Iterable[KeyOrIndex]],
     default=None,
     *,
-    items=True,
-    attributes=False,
-    split_char=None,
-    parse_indices=False
+    items: bool = True,
+    attributes: bool = False,
+    split_char: Optional[str] = None,
+    parse_indices: bool = False
 ):
     if split_char is not None:
         if isinstance(path, str):
