@@ -147,7 +147,6 @@ AttributesSpec = Iterable[Union[str, Tuple[str, Any]]]
 def obj_attr_iter(
     obj: Any, attributes: Optional[AttributesSpec] = None
 ) -> Iterator[Tuple[str, Any]]:
-
     # Given attributes
     if attributes is not None:
         for k in attributes:

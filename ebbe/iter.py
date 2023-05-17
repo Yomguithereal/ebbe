@@ -25,7 +25,6 @@ def as_chunks(size, iterable):
 
 
 def as_grams(size, iterable):
-
     # For sized sequences
     if isinstance(iterable, Sequence):
         l = len(iterable)

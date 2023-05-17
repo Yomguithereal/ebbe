@@ -16,7 +16,6 @@ class TestDecorators(object):
             hellraiser()
 
     def test_with_defer(self):
-
         values = []
 
         @with_defer()

@@ -2,6 +2,9 @@
 # Ebbe Miscellaneous Helper Functions
 # =============================================================================
 #
+from typing import Optional, overload
+from ebbe.types import Indexable, K, V
+
 from sys import version_info
 from collections import OrderedDict
 from collections.abc import Iterable
@@ -11,7 +14,17 @@ DEFAULT_ORDERED_DICT = dict if AT_LEAST_PY37 else OrderedDict
 NOT_FOUND = object()
 
 
-def get(target, key, default=None):
+@overload
+def get(target: Indexable[K, V], key: K, default: None = ...) -> Optional[V]:
+    ...
+
+
+@overload
+def get(target: Indexable[K, V], key: K, default: V = ...) -> V:
+    ...
+
+
+def get(target: Indexable[K, V], key: K, default: Optional[V] = None) -> Optional[V]:
     try:
         return target[key]
     except (KeyError, IndexError):
@@ -54,7 +67,6 @@ def getpath(
     split_char=None,
     parse_indices=False
 ):
-
     if split_char is not None:
         if isinstance(path, str):
             path = parse_path(path, split_char=split_char, parse_indices=parse_indices)
@@ -87,7 +99,6 @@ def pathgetter(
     parse_indices=False,
     default=None
 ):
-
     if not paths:
         raise TypeError
 
