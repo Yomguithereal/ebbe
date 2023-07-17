@@ -2,10 +2,21 @@
 # Ebbe Iterating Functions
 # =============================================================================
 #
-from typing import Iterator, Iterable, List, Tuple, TypeVar, Optional
+from typing import (
+    Any,
+    Iterator,
+    Iterable,
+    List,
+    Union,
+    Tuple,
+    TypeVar,
+    Optional,
+    Callable,
+    Sequence,
+    overload,
+)
 
 from collections import deque
-from collections.abc import Sequence
 
 T = TypeVar("T")
 
@@ -28,7 +39,29 @@ def as_chunks(size: int, iterable: Iterable[T]) -> Iterator[List[T]]:
         yield chunk
 
 
-def as_grams(size, iterable):
+@overload
+def as_grams(size: int, iterable: str) -> Iterator[str]:
+    ...
+
+
+@overload
+def as_grams(size: int, iterable: List[T]) -> Iterator[List[T]]:
+    ...
+
+
+@overload
+def as_grams(size: int, iterable: Sequence[T]) -> Iterator[Sequence[T]]:
+    ...
+
+
+@overload
+def as_grams(size: int, iterable: Iterable[T]) -> Iterator[Tuple[T]]:
+    ...
+
+
+def as_grams(
+    size: int, iterable: Union[Iterable[T], Sequence[T]]
+) -> Union[Iterator[str], Iterator[List[T]], Iterator[Tuple[T]], Iterator[Sequence[T]]]:
     # For sized sequences
     if isinstance(iterable, Sequence):
         l = len(iterable)
@@ -79,7 +112,9 @@ def fail_fast(iterable: Iterable[T]) -> Iterator[T]:
     return generator()
 
 
-def uniq(iterable, *, key=None):
+def uniq(
+    iterable: Iterable[T], *, key: Optional[Callable[[T], Any]] = None
+) -> Iterator[T]:
     last_k = None
 
     for is_first, item in with_is_first(iterable):
@@ -99,7 +134,9 @@ def uniq(iterable, *, key=None):
         last_k = k
 
 
-def distinct(iterable, *, key=None):
+def distinct(
+    iterable: Iterable[T], *, key: Optional[Callable[[T], Any]] = None
+) -> Iterator[T]:
     already_seen = set()
 
     for item in iterable:
