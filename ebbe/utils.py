@@ -20,6 +20,7 @@ from typing import (
     Type,
     overload,
 )
+from ebbe.types import Protocol
 
 from sys import version_info
 from collections import OrderedDict
@@ -32,6 +33,7 @@ T = TypeVar("T")
 K = TypeVar("K")
 V = TypeVar("V")
 D = TypeVar("D")
+GD = TypeVar("GD", covariant=True)
 
 KeyOrIndex = Union[str, int]
 Path = Union[KeyOrIndex, Iterable[KeyOrIndex]]
@@ -68,7 +70,40 @@ def get(
         return default
 
 
-def getter(key, default=None):
+class Getter(Protocol[K, GD]):
+    @overload
+    def __call__(self, target: Mapping[K, V], default: None = ...) -> Union[V, GD]:
+        ...
+
+    @overload
+    def __call__(self, target: Mapping[K, V], default: D = ...) -> Union[V, D]:
+        ...
+
+    @overload
+    def __call__(self, target: Sequence[V], default: None = ...) -> Union[V, GD]:
+        ...
+
+    @overload
+    def __call__(self, target: Sequence[V], default: D = ...) -> Union[V, D]:
+        ...
+
+    def __call__(
+        self, target: Gettable[K, V], default: Optional[D] = None
+    ) -> Union[V, D, GD]:
+        ...
+
+
+@overload
+def getter(key: K, default: None = ...) -> Getter[K, None]:
+    ...
+
+
+@overload
+def getter(key: K, default: GD = ...) -> Getter[K, GD]:
+    ...
+
+
+def getter(key: K, default: Optional[GD] = None) -> Getter[K, GD]:
     def operation(target, default=default):
         try:
             return target[key]
