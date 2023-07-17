@@ -2,7 +2,18 @@
 # Ebbe Miscellaneous Helper Functions
 # =============================================================================
 #
-from typing import Optional, Dict, Container, Iterable, TypeVar, Union, overload
+from typing import (
+    Optional,
+    Dict,
+    Container,
+    Iterable,
+    TypeVar,
+    Union,
+    List,
+    Any,
+    Callable,
+    overload,
+)
 from ebbe.types import Indexable, K, V
 
 from sys import version_info
@@ -14,6 +25,7 @@ NOT_FOUND = object()
 
 
 D = TypeVar("D")
+T = TypeVar("T")
 
 
 @overload
@@ -137,13 +149,18 @@ def pathgetter(
     return operation
 
 
-def sorted_uniq(iterable, *, key=None, **kwargs):
+def sorted_uniq(
+    iterable: Iterable[T],
+    *,
+    key: Optional[Callable[[T], Any]] = None,
+    reverse: bool = False
+) -> List[T]:
     started = False
     last_k = None
 
     output = []
 
-    for item in sorted(iterable, key=key, **kwargs):
+    for item in sorted(iterable, key=key, reverse=reverse):
         k = item
 
         if key is not None:
