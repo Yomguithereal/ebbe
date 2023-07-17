@@ -45,14 +45,16 @@ def getter(key, default=None):
     return operation
 
 
-def parse_index(value):
+def parse_index(value: str) -> Union[str, int]:
     try:
         return int(value)
     except ValueError:
         return value
 
 
-def parse_path(string, *, split_char=".", parse_indices=False):
+def parse_path(
+    string: str, *, split_char: str = ".", parse_indices: bool = False
+) -> Iterable[Union[str, int]]:
     path = string.split(split_char)
 
     if parse_indices:
