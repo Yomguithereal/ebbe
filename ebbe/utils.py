@@ -9,10 +9,12 @@ from typing import (
     MutableMapping,
     Sequence,
     Container,
+    Collection,
     Iterable,
     TypeVar,
     Union,
     List,
+    Set,
     Any,
     Callable,
     Type,
@@ -249,7 +251,77 @@ def indexed(
     return index
 
 
-def grouped(iterable, factory=dict, container=list, *, key=None, value=None):
+@overload
+def grouped(iterable: Iterable[T]) -> Dict[T, List[T]]:
+    ...
+
+
+@overload
+def grouped(iterable: Iterable[T], *, key: Callable[[T], K]) -> Dict[K, List[T]]:
+    ...
+
+
+@overload
+def grouped(iterable: Iterable[T], *, value: Callable[[T], V]) -> Dict[T, List[V]]:
+    ...
+
+
+@overload
+def grouped(
+    iterable: Iterable[T], *, key: Callable[[T], K], value: Callable[[T], V]
+) -> Dict[K, List[V]]:
+    ...
+
+
+@overload
+def grouped(
+    iterable: Iterable[T], factory: Type[Dict] = ..., container: Type[Set] = ...
+) -> Dict[T, Set[T]]:
+    ...
+
+
+@overload
+def grouped(
+    iterable: Iterable[T],
+    factory: Type[Dict] = ...,
+    container: Type[Set] = ...,
+    *,
+    key: Callable[[T], K]
+) -> Dict[K, Set[T]]:
+    ...
+
+
+@overload
+def grouped(
+    iterable: Iterable[T],
+    factory: Type[Dict] = ...,
+    container: Type[Set] = ...,
+    *,
+    value: Callable[[T], V]
+) -> Dict[T, Set[V]]:
+    ...
+
+
+@overload
+def grouped(
+    iterable: Iterable[T],
+    factory: Type[Dict] = ...,
+    container: Type[Set] = ...,
+    *,
+    key: Callable[[T], K],
+    value: Callable[[T], V]
+) -> Dict[K, Set[V]]:
+    ...
+
+
+def grouped(
+    iterable: Iterable[T],
+    factory: Type = dict,
+    container: Type = list,
+    *,
+    key: Optional[Callable[[T], Any]] = None,
+    value: Optional[Callable[[T], Any]] = None
+) -> MutableMapping:
     if not isinstance(iterable, Iterable):
         raise TypeError("target is not iterable")
 
@@ -289,10 +361,15 @@ def grouped(iterable, factory=dict, container=list, *, key=None, value=None):
 
 
 def partitioned(
-    iterable, factory=DEFAULT_ORDERED_DICT, container=list, *, key=None, value=None
-):
+    iterable: Iterable[T],
+    factory: Type = DEFAULT_ORDERED_DICT,
+    container: Type = list,
+    *,
+    key: Optional[Callable[[T], Any]] = None,
+    value: Optional[Callable[[T], V]] = None
+) -> Union[List[Collection[T]], List[Collection[V]]]:
     groups = grouped(iterable, factory, container, key=key, value=value)
-    return list(groups.values())
+    return list(groups.values())  # type: ignore
 
 
 def grouped_items(iterable, factory=dict, container=list):
