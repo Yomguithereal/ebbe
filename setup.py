@@ -5,7 +5,7 @@ with open("./README.md", "r") as f:
 
 setup(
     name="ebbe",
-    version="1.13.1",
+    version="1.13.2",
     description="Collection of typical helper functions for python.",
     long_description=long_description,
     long_description_content_type="text/markdown",
