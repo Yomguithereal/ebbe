@@ -19,7 +19,7 @@ setup(
     package_data={"docs": ["README.md"]},
     install_requires=[],
     extras_require={
-        ":python_version<'3.8'": ["typing_extensions"],
+        ":python_version<'3.10'": ["typing_extensions"],
     },
     zip_safe=True,
 )

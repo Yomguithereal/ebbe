@@ -1,4 +1,5 @@
 # Dev Dependencies
 pytest==7.0.1
 twine
+typing_extensions>=4.3; python_version < '3.10'
 wheel
