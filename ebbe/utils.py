@@ -132,15 +132,15 @@ def parse_path(
 
 
 def getpath(
-    target,
+    target: Any,
     path: Path,
-    default=None,
+    default: Optional[Any] = None,
     *,
     items: bool = True,
     attributes: bool = False,
     split_char: Optional[str] = None,
     parse_indices: bool = False
-):
+) -> Any:
     if split_char is not None:
         if isinstance(path, str):
             path = parse_path(path, split_char=split_char, parse_indices=parse_indices)
@@ -165,14 +165,19 @@ def getpath(
     return target
 
 
+class PathGetter(Protocol):
+    def __call__(self, target: Any, default: Optional[Any] = ...) -> Any:
+        ...
+
+
 def pathgetter(
-    *paths,
-    items=True,
-    attributes=False,
-    split_char=None,
-    parse_indices=False,
-    default=None
-):
+    *paths: Path,
+    items: bool = True,
+    attributes: bool = False,
+    split_char: Optional[str] = None,
+    parse_indices: bool = False,
+    default: Optional[Any] = None
+) -> PathGetter:
     if not paths:
         raise TypeError
 
@@ -181,7 +186,7 @@ def pathgetter(
         paths = [
             list(parse_path(p, split_char=split_char, parse_indices=parse_indices))
             for p in paths
-        ]
+        ]  # type: ignore
 
     if len(paths) == 1:
 
