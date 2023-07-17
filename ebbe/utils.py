@@ -34,21 +34,21 @@ D = TypeVar("D")
 KeyOrIndex = Union[str, int]
 Path = Union[KeyOrIndex, Iterable[KeyOrIndex]]
 
-Indexable = Union[Mapping[str, V], Mapping[int, V], Sequence[V]]
+Gettable = Union[Mapping[K, V], Sequence[V]]
 
 
 @overload
-def get(target: Indexable[V], key: KeyOrIndex, default: None = ...) -> Optional[V]:
+def get(target: Gettable[K, V], key: K, default: None = ...) -> Optional[V]:
     ...
 
 
 @overload
-def get(target: Indexable[V], key: KeyOrIndex, default: D = ...) -> Union[V, D]:
+def get(target: Gettable[K, V], key: K, default: D = ...) -> Union[V, D]:
     ...
 
 
 def get(
-    target: Indexable[V], key: KeyOrIndex, default: Optional[D] = None
+    target: Gettable[K, V], key: K, default: Optional[D] = None
 ) -> Optional[Union[V, D]]:
     try:
         return target[key]  # type: ignore
