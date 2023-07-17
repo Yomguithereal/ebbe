@@ -64,11 +64,12 @@ def parse_path(
 
 
 KeyOrIndex = Union[str, int]
+Path = Union[KeyOrIndex, Iterable[KeyOrIndex]]
 
 
 def getpath(
     target,
-    path: Union[KeyOrIndex, Iterable[KeyOrIndex]],
+    path: Path,
     default=None,
     *,
     items: bool = True,
