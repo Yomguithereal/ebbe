@@ -5,6 +5,7 @@
 from typing import (
     Optional,
     Dict,
+    MutableMapping,
     Container,
     Iterable,
     TypeVar,
@@ -12,6 +13,7 @@ from typing import (
     List,
     Any,
     Callable,
+    Type,
     overload,
 )
 from ebbe.types import Indexable, K, V
@@ -179,7 +181,39 @@ def sorted_uniq(
     return output
 
 
-def indexed(iterable, factory=dict, *, key=None):
+@overload
+def indexed(iterable: Iterable[V], *, key: None = ...) -> Dict[V, V]:
+    ...
+
+
+@overload
+def indexed(iterable: Iterable[V], *, key: Callable[[V], K] = ...) -> Dict[K, V]:
+    ...
+
+
+@overload
+def indexed(
+    iterable: Iterable[V], factory: Type[MutableMapping] = ..., *, key: None = ...
+) -> MutableMapping[V, V]:
+    ...
+
+
+@overload
+def indexed(
+    iterable: Iterable[V],
+    factory: Type[MutableMapping] = ...,
+    *,
+    key: Callable[[V], K] = ...
+) -> MutableMapping[K, V]:
+    ...
+
+
+def indexed(
+    iterable: Iterable[V],
+    factory: Type = dict,
+    *,
+    key: Optional[Callable[[V], K]] = None
+) -> Union[MutableMapping[K, V], MutableMapping[V, V]]:
     if not isinstance(iterable, Iterable):
         raise TypeError("target is not iterable")
 
