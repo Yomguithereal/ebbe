@@ -14,6 +14,7 @@ from typing import (
     TypeVar,
     Union,
     List,
+    Tuple,
     Set,
     Any,
     Callable,
@@ -171,15 +172,37 @@ class PathGetter(Protocol):
 
 
 def pathgetter(
+    path: Path,
+    items: bool = True,
+    attributes: bool = False,
+    split_char: Optional[str] = None,
+    parse_indices: bool = False,
+    default: Optional[Any] = None,
+) -> PathGetter:
+
+    # Preparsing paths
+    if split_char is not None:
+        path = parse_path(path, split_char=split_char, parse_indices=parse_indices)
+
+    def operation(target, default=default):
+        return getpath(target, path, default, items=items, attributes=attributes)
+
+    return operation
+
+
+class PathsGetter(Protocol):
+    def __call__(self, target: Any, default: Optional[Any] = ...) -> Tuple[Any]:
+        ...
+
+
+def pathsgetter(
     *paths: Path,
     items: bool = True,
     attributes: bool = False,
     split_char: Optional[str] = None,
     parse_indices: bool = False,
     default: Optional[Any] = None
-) -> PathGetter:
-    if not paths:
-        raise TypeError
+) -> PathsGetter:
 
     # Preparsing paths
     if split_char is not None:
@@ -188,20 +211,11 @@ def pathgetter(
             for p in paths
         ]  # type: ignore
 
-    if len(paths) == 1:
-
-        def operation(target, default=default):
-            return getpath(
-                target, paths[0], default, items=items, attributes=attributes
-            )
-
-    else:
-
-        def operation(target, default=default):
-            return tuple(
-                getpath(target, path, default, items=items, attributes=attributes)
-                for path in paths
-            )
+    def operation(target, default=default):
+        return tuple(
+            getpath(target, path, default, items=items, attributes=attributes)
+            for path in paths
+        )
 
     return operation
 

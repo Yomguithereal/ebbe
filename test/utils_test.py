@@ -10,6 +10,7 @@ from ebbe import (
     getter,
     getpath,
     pathgetter,
+    pathsgetter,
     sorted_uniq,
     indexed,
     grouped,
@@ -111,7 +112,7 @@ class TestUtils(object):
             == 3
         )
 
-        tuple_getter = pathgetter(["a", "d", "e"], ["a", "c"], ["a", "b", 1])
+        tuple_getter = pathsgetter(["a", "d", "e"], ["a", "c"], ["a", "b", 1])
 
         assert tuple_getter(NESTED_OBJECT) == (5, None, 45)
 
