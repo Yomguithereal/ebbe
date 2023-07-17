@@ -38,12 +38,22 @@ Gettable = Union[Mapping[K, V], Sequence[V]]
 
 
 @overload
-def get(target: Gettable[K, V], key: K, default: None = ...) -> Optional[V]:
+def get(target: Mapping[K, V], key: K, default: None = ...) -> Optional[V]:
     ...
 
 
 @overload
-def get(target: Gettable[K, V], key: K, default: D = ...) -> Union[V, D]:
+def get(target: Mapping[K, V], key: K, default: D = ...) -> Union[V, D]:
+    ...
+
+
+@overload
+def get(target: Sequence[V], key: int, default: None = ...) -> Optional[V]:
+    ...
+
+
+@overload
+def get(target: Sequence[V], key: int, default: D = ...) -> Union[V, D]:
     ...
 
 
