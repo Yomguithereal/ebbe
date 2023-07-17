@@ -5,7 +5,9 @@
 from typing import (
     Optional,
     Dict,
+    Mapping,
     MutableMapping,
+    Sequence,
     Container,
     Iterable,
     TypeVar,
@@ -16,7 +18,6 @@ from typing import (
     Type,
     overload,
 )
-from ebbe.types import Indexable, K, V
 
 from sys import version_info
 from collections import OrderedDict
@@ -25,26 +26,32 @@ AT_LEAST_PY37 = version_info >= (3, 7)
 DEFAULT_ORDERED_DICT = dict if AT_LEAST_PY37 else OrderedDict
 NOT_FOUND = object()
 
-
-D = TypeVar("D")
 T = TypeVar("T")
+K = TypeVar("K")
+V = TypeVar("V")
+D = TypeVar("D")
+
+KeyOrIndex = Union[str, int]
+Path = Union[KeyOrIndex, Iterable[KeyOrIndex]]
+
+Indexable = Union[Mapping[str, V], Mapping[int, V], Sequence[V]]
 
 
 @overload
-def get(target: Indexable[K, V], key: K, default: None = ...) -> Optional[V]:
+def get(target: Indexable[V], key: KeyOrIndex, default: None = ...) -> Optional[V]:
     ...
 
 
 @overload
-def get(target: Indexable[K, V], key: K, default: D = ...) -> Union[V, D]:
+def get(target: Indexable[V], key: KeyOrIndex, default: D = ...) -> Union[V, D]:
     ...
 
 
 def get(
-    target: Indexable[K, V], key: K, default: Optional[D] = None
+    target: Indexable[V], key: KeyOrIndex, default: Optional[D] = None
 ) -> Optional[Union[V, D]]:
     try:
-        return target[key]
+        return target[key]  # type: ignore
     except (KeyError, IndexError):
         return default
 
@@ -75,10 +82,6 @@ def parse_path(
         path = (parse_index(i) for i in path)
 
     return path
-
-
-KeyOrIndex = Union[str, int]
-Path = Union[KeyOrIndex, Iterable[KeyOrIndex]]
 
 
 def getpath(
