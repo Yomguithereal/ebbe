@@ -17,6 +17,7 @@ pip install ebbe
 *Iterator functions*
 
 * [as_chunks](#as_chunks)
+* [as_reconciled_chunks](#as_reconciled_chunks)
 * [as_grams](#as_grams)
 * [fail_fast](#fail_fast)
 * [uniq](#uniq)
@@ -74,6 +75,25 @@ from ebbe import as_chunks
 
 list(as_chunks(3, [1, 2, 3, 4, 5]))
 >>> [[1, 2, 3], [4, 5]]
+```
+
+### as_reconciled_chunks
+
+Iterate over chunks of the desired size by grouping items as we iterate over them, then call a function returning some result for a given chunk, then "reconcile" chunk items using another function to finally produce a flat iterator over original values along with the associated result.
+
+```python
+from ebbe import as_reconciled_chunks
+
+data = [1, 2, 3, 4, 5, 6]
+
+def work(chunk):
+    return {n: True for n in chunk if n % 2 == 0}
+
+def reconcile(data, item):
+    return data.get(item)
+
+list(as_reconciled_chunks(3, data, work, reconcile))
+>>> [(1, None), (2, True), (3, None), (4, True), (5, None), (6, True)]
 ```
 
 ### as_grams

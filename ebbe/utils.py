@@ -179,7 +179,6 @@ def pathgetter(
     parse_indices: bool = False,
     default: Optional[Any] = None,
 ) -> PathGetter:
-
     # Preparsing paths
     if split_char is not None:
         path = parse_path(path, split_char=split_char, parse_indices=parse_indices)
@@ -203,7 +202,6 @@ def pathsgetter(
     parse_indices: bool = False,
     default: Optional[Any] = None
 ) -> PathsGetter:
-
     # Preparsing paths
     if split_char is not None:
         paths = [

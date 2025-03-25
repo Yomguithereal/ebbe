@@ -6,6 +6,7 @@ from operator import itemgetter
 
 from ebbe import (
     as_chunks,
+    as_reconciled_chunks,
     as_grams,
     fail_fast,
     uniq,
@@ -65,6 +66,25 @@ class TestIter(object):
         result = list(as_chunks(3, []))
 
         assert result == []
+
+    def test_as_reconciled_chunks(self):
+        data = [1, 2, 3, 4, 5, 6]
+
+        def work(chunk):
+            return {n: True for n in chunk if n % 2 == 0}
+
+        def reconcile(data, item):
+            return data.get(item)
+
+        for size in range(1, 7):
+            assert list(as_reconciled_chunks(size, data, work, reconcile)) == [
+                (1, None),
+                (2, True),
+                (3, None),
+                (4, True),
+                (5, None),
+                (6, True),
+            ]
 
     def test_as_grams(self):
         for i in range(4):

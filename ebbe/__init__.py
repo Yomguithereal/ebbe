@@ -14,6 +14,7 @@ from ebbe.format import (
 from ebbe.func import compose, rcompose, count_arity, noop
 from ebbe.iter import (
     as_chunks,
+    as_reconciled_chunks,
     as_grams,
     fail_fast,
     uniq,

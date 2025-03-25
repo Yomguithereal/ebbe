@@ -19,6 +19,8 @@ from typing import (
 from collections import deque
 
 T = TypeVar("T")
+W = TypeVar("W")
+V = TypeVar("V")
 
 
 def empty_generator() -> Iterator:
@@ -37,6 +39,21 @@ def as_chunks(size: int, iterable: Iterable[T]) -> Iterator[List[T]]:
 
     if chunk:
         yield chunk
+
+
+def as_reconciled_chunks(
+    size: int,
+    iterable: Iterable[T],
+    work: Callable[[List[T]], W],
+    reconcile: Callable[[W, T], V],
+) -> Iterator[Tuple[T, V]]:
+    for chunk in as_chunks(size, iterable):
+        data = work(chunk)
+
+        for item in chunk:
+            reconciled = reconcile(data, item)
+
+            yield item, reconciled
 
 
 @overload
