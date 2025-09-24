@@ -56,6 +56,26 @@ def as_reconciled_chunks(
             yield item, reconciled
 
 
+# NOTE: this function makes the following assumptions:
+#   1. the work done is single-threaded
+#   2. items are emitted in the same order they are given
+def outer_zip(
+    complex_iterable: Iterable[T],
+    key: Callable[[T], W],
+    work: Callable[[Iterator[W]], Iterator[V]],
+) -> Iterator[Tuple[T, V]]:
+    queue = deque()
+
+    def simple_iterable():
+        for item in complex_iterable:
+            queue.append(item)
+            yield key(item)
+
+    for result in work(simple_iterable()):
+        item = queue.popleft()
+        yield item, result
+
+
 @overload
 def as_grams(size: int, iterable: str) -> Iterator[str]:
     ...

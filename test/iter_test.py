@@ -7,6 +7,7 @@ from operator import itemgetter
 from ebbe import (
     as_chunks,
     as_reconciled_chunks,
+    outer_zip,
     as_grams,
     fail_fast,
     uniq,
@@ -85,6 +86,21 @@ class TestIter(object):
                 (5, None),
                 (6, True),
             ]
+
+    def test_outer_zip(self):
+        data = [("one", 1), ("two", 2), ("three", 3)]
+
+        output = []
+
+        def work(items):
+            for chunk in as_chunks(2, items):
+                for item in chunk:
+                    yield item * 2
+
+        for original_item, result in outer_zip(data, key=lambda p: p[1], work=work):
+            output.append((original_item[0], result))
+
+        assert output == [("one", 2), ("two", 4), ("three", 6)]
 
     def test_as_grams(self):
         for i in range(4):

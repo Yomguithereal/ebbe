@@ -18,6 +18,7 @@ pip install ebbe
 
 * [as_chunks](#as_chunks)
 * [as_reconciled_chunks](#as_reconciled_chunks)
+* [outer_zip](#outer_zip)
 * [as_grams](#as_grams)
 * [fail_fast](#fail_fast)
 * [uniq](#uniq)
@@ -94,6 +95,31 @@ def reconcile(data, item):
 
 list(as_reconciled_chunks(3, data, work, reconcile))
 >>> [(1, None), (2, True), (3, None), (4, True), (5, None), (6, True)]
+```
+
+### outer_zip
+
+Iterate over an iterator from which one must extract a key to work on to produce a resulting iterator all while keeping a reference to the original item in the output.
+
+Note that this function only produces a correct output if:
+
+1. work done is single-threaded (this function is absolutely not threadsafe)
+2. the work function emits resulting items in the same order they are consumed from the input
+
+```python
+from ebbe import outer_zip
+
+data = [("one", 1), ("two", 2), ("three", 3)]
+
+def work(numbers: Iterator[int]) -> Iterator[int]:
+  for n in numbers:
+    yield n * 2
+
+list(
+  (original_item[0], result)
+  for original_item, result in outer_zip(data, key=lambda p: p[1], work=work)
+)
+>>> [("one", 2), ("two", 4), ("three", 6)]
 ```
 
 ### as_grams
