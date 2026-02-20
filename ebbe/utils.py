@@ -153,7 +153,7 @@ def getpath(
         if items and callable(getattr(target, "__getitem__", None)):
             try:
                 target = target[step]
-            except (IndexError, KeyError):
+            except (IndexError, KeyError, TypeError):
                 return default
         elif attributes:
             try:
